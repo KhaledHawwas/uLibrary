@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "name": "algebra1",
+  "remote_path": "data/algebra1/",
+  "items": [
+    {
+      "name": "algebra1",
+      "author": "khaled",
+      "remotePath": "data/algebra1/books/DiscreteStructures.pdf",
+      "catalog": "books"
+    }
+  ]
+}
