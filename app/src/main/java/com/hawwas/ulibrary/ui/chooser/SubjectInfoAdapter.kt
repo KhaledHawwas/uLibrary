@@ -5,17 +5,17 @@ import androidx.recyclerview.widget.*
 import com.hawwas.ulibrary.databinding.*
 import com.hawwas.ulibrary.model.*
 
-class SubjectInfoAdapter :
+class SubjectInfoAdapter:
     RecyclerView.Adapter<SubjectInfoAdapter.ViewHolder>() {
-    var subjectsInfo: List<SubjectInfo> = emptyList()
+    var subjectsInfo: List<SubjectHeader> = emptyList()
 
-    class ViewHolder(private val binding: ItemSubjectInfoBinding) :
+    class ViewHolder(private val binding: ItemSubjectInfoBinding):
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(subjectInfo: SubjectInfo) {
-            binding.subjectName.text = subjectInfo.name
-            binding.subjectSelectedSw.isChecked = subjectInfo.selected
-            binding.subjectSelectedSw.setOnClickListener {
-                subjectInfo.selected = binding.subjectSelectedSw.isChecked
+        fun bind(subjectHeader: SubjectHeader) {
+            binding.subjectName.text = subjectHeader.name
+            binding.subjectSelectedCB.isChecked = subjectHeader.selected
+            binding.subjectSelectedCB.setOnClickListener {
+                subjectHeader.selected = binding.subjectSelectedCB.isChecked
             }
         }
 
@@ -27,7 +27,6 @@ class SubjectInfoAdapter :
             parent,
             false
         )
-
         return ViewHolder(binding)
     }
 

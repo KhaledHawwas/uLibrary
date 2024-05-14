@@ -1,11 +1,11 @@
 package com.hawwas.ulibrary.domain.repo
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.*
 import com.hawwas.ulibrary.model.*
 
 interface AppDataRepo {
-    fun getSubjectsInfo(): LiveData<List<SubjectInfo>>
-    fun updateSubjectsInfo(ls:List<SubjectInfo>)
+    fun getSubjectsInfo(): LiveData<List<SubjectHeader>>
+    fun updateSubjectsInfo(ls: List<SubjectHeader>)
     fun getSubjectsLive(): LiveData<List<Subject>>
     fun getSubjects(): List<Subject>
     fun updateSubject(subject: Subject)

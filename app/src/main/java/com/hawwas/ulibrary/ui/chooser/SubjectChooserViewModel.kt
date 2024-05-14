@@ -12,24 +12,21 @@ import javax.inject.*
 
 const val day = 1000 * 60 * 60 * 24
 @HiltViewModel
-class SubjectChooserViewModel @Inject constructor(
-    private val appStorage: FileStorage
-): ViewModel() {
+class SubjectChooserViewModel @Inject constructor(): ViewModel() {
     @Inject lateinit var appDataRepo: AppDataRepo
 
-    @Inject lateinit var remoteService: RemoteService
+    @Inject lateinit var remoteRepo: RemoteRepo
 
-    @Inject lateinit var dataStore: DataStoreManager
+    @Inject lateinit var appStorage: LocalStorage
 
-
-    fun getSubjectsInfo(): LiveData<List<SubjectInfo>> {
-        val content = appStorage.getFileContent(FileStorage.subjectsInfoAbs)
+    fun getSubjectsInfo(): LiveData<List<SubjectHeader>> {
+        val content = appStorage.getFileContent(LocalStorage.subjectsInfoAbs)
         if (content != null) {
             CoroutineScope(Dispatchers.Main).launch {
-                val time = dataStore.getLastFetchedTime()
+                val time = appStorage.getLastFetchedTime()
                 if (System.currentTimeMillis() - time > day) {
                     Log.d(TAG, "getSubjectsInfo: updating subjects info")
-                    fromRemoteStorage()
+                    subjectsFromRemote()
                 } else {
                     Log.d(TAG, "getSubjectsInfo: from local storage")
                     appDataRepo.updateSubjectsInfo(toSubjectsInfoList(content))
@@ -37,55 +34,47 @@ class SubjectChooserViewModel @Inject constructor(
             }
             return appDataRepo.getSubjectsInfo()
         } else {
-            return fromRemoteStorage()
+            return subjectsFromRemote()
         }
 
     }
 
     /**
-     * Fetch subjects info from remote storage and save it to local storage
+     * Fetch subjects headers from remote storage and save it to local storage
      */
-    private fun fromRemoteStorage(): LiveData<List<SubjectInfo>> {
+    private fun subjectsFromRemote(): LiveData<List<SubjectHeader>> {
         Log.d(TAG, "getSubjectsInfo: from remote storage")
         CoroutineScope(Dispatchers.Main).launch {
-            dataStore.saveLastFetchedTime(System.currentTimeMillis())
+            appStorage.saveLastFetchedTime(System.currentTimeMillis())
         }
-        remoteService.fetchFileFromRepo(FileStorage.subjectsInfoAbs, MyCallback({ data ->
-            appStorage.saveFile(
-                FileStorage.rootDir,
-                FileStorage.subjectsInfoFile,
-                data.toByteArray()
+        remoteRepo.fetchFileFromRepo(RemoteRepo.subjectsHeaderAbs, MyCallback({ data ->
+            appStorage.saveCacheFile(
+                "./", LocalStorage.subjectsHeaderFile, data.toByteArray()
             )
             val subjects = toSubjectsInfoList(data)
-            for (subject in subjects) {
-                Log.d(TAG, "$subjects")
-            }
+            Log.d(TAG, "$subjects")
             appDataRepo.updateSubjectsInfo(subjects)
             Log.d(TAG, "getSubjectsInfo: from remote storage success")
-        }, { exception ->
-            exception.printStackTrace()
         }))
         return appDataRepo.getSubjectsInfo()
     }
 
-    fun saveSubjectsHeaders(subjectsInfo: List<SubjectInfo>) {
+    fun saveSubjects(subjectsInfo: List<SubjectHeader>) {
         for (subjectInfo in subjectsInfo) {
-            remoteService.fetchFileFromRepo(subjectInfo.remotePath, MyCallback({ data ->
+            remoteRepo.fetchFileFromRepo(subjectInfo.remotePath, MyCallback({ data ->
+                val subject = toSubject(data)
                 appStorage.saveFile(
-                    FileStorage.subjectsDir+subjectInfo.name,FileStorage.subjectFile, data.toByteArray()
+                    LocalStorage.rootDir + LocalStorage.subjectsDir + subject.name,
+                    LocalStorage.subjectFile,
+                    data.toByteArray()
                 )
-                val subject = toSubject(data).apply {
-                    filePath = FileStorage.subjectsDir + subjectInfo.name
-                }
                 appDataRepo.updateSubject(subject)
-                Log.d(TAG, "save ${subject.name}: from remote storage success")
             }, { exception ->
                 exception.printStackTrace()
             }))
         }
 
     }
-
 
     companion object {
         private const val TAG = "KH_SubjectChooserVM"

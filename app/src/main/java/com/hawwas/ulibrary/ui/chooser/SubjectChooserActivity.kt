@@ -8,7 +8,7 @@ import com.hawwas.ulibrary.databinding.*
 import dagger.hilt.android.*
 
 @AndroidEntryPoint
-class SubjectChooserActivity : AppCompatActivity() {
+class SubjectChooserActivity: AppCompatActivity() {
     private lateinit var binding: ActivitySubjectChooserBinding
     private val viewModel: SubjectChooserViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +23,7 @@ class SubjectChooserActivity : AppCompatActivity() {
             subjectInfoAdapter.notifyDataSetChanged()
         }
         binding.saveSubjectsInfoBtn.setOnClickListener {
-            viewModel.saveSubjectsHeaders(subjectInfoAdapter.subjectsInfo)
+            viewModel.saveSubjects(subjectInfoAdapter.subjectsInfo)
             finish()
         }
     }

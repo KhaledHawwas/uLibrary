@@ -4,24 +4,27 @@ import androidx.lifecycle.*
 import com.hawwas.ulibrary.domain.repo.*
 import com.hawwas.ulibrary.model.*
 
-class AppDataRepoImpl : AppDataRepo {
-    private val subjectsInfoLive = MutableLiveData<List<SubjectInfo>>()
+class AppDataRepoImpl: AppDataRepo {
+    private val subjectsInfoLive = MutableLiveData<List<SubjectHeader>>()
     private val selectedSubjectsLive = MutableLiveData<List<Subject>>()
     private var selectedSubjects = mutableListOf<Subject>()
+
     init {
         selectedSubjectsLive.observeForever { ls ->
-            selectedSubjects = ls.toMutableList()}
+            selectedSubjects = ls.toMutableList()
+        }
 
     }
+
     override fun updateSubjects(subjects: List<Subject>) {
         selectedSubjectsLive.postValue(subjects)
     }
 
-    override fun getSubjectsInfo(): LiveData<List<SubjectInfo>> {
+    override fun getSubjectsInfo(): LiveData<List<SubjectHeader>> {
         return subjectsInfoLive
     }
 
-    override fun updateSubjectsInfo(ls: List<SubjectInfo>) {
+    override fun updateSubjectsInfo(ls: List<SubjectHeader>) {
         subjectsInfoLive.postValue(ls)
     }
 

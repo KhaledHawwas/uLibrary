@@ -2,18 +2,36 @@ package com.hawwas.ulibrary.ui
 
 import android.view.*
 import androidx.recyclerview.widget.*
-import com.hawwas.ulibrary.databinding.ItemSubjectBinding
+import com.hawwas.ulibrary.*
+import com.hawwas.ulibrary.data.remote.*
+import com.hawwas.ulibrary.databinding.*
+import com.hawwas.ulibrary.domain.repo.*
 import com.hawwas.ulibrary.model.*
+import javax.inject.*
 
-class ItemSubjectAdapter: RecyclerView.Adapter<ItemSubjectAdapter.ViewHolder>() {
+class ItemSubjectAdapter(private val androidDownloader: AndroidDownloader):
+    RecyclerView.Adapter<ItemSubjectAdapter.ViewHolder>() {
     var subjects: List<Subject> = emptyList()
+    @Inject
+    lateinit var appDataRepo: AppDataRepo
 
-    class ViewHolder(private val binding: ItemSubjectBinding) :
+    inner class ViewHolder(private val binding: ItemSubjectBinding):
         RecyclerView.ViewHolder(binding.root) {
         fun bind(subject: Subject) {
             binding.subjectNameTv.text = subject.name
-            binding.itemsCountTv.text = subject.items.toString()
+            val downloadedItems = subject.items.count { it.downloaded == DownloadStatus.DOWNLOADED }
+            binding.itemsCountTv.text =
+                "${subject.items.size}/${downloadedItems}"
+            binding.downloadSubjectBtn.setOnClickListener {
+                androidDownloader.downloadSubject(subject)
+            }
+            binding.downloadSubjectBtn.setImageResource(
+                if (downloadedItems == subject.items.size) R.drawable.download_done_24px
+                else R.drawable.download_24px
+            )
+
         }
+
 
     }
 
