@@ -3,6 +3,10 @@
     {
       "name": "linear algebra l1",
       "path": "data/algebra1/algebra1.json"
+    },
+    {
+        "name": "oop l1",
+        "path": "data/oop1/oop1.json"
     }
   ]
 }

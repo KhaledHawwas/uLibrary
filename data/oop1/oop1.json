@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "name": "oop1",
+  "remote_path": "data/oop1/",
+  "items": [
+    {
+      "name": "oop part1.pdf",
+      "version": "1.0.0",
+      "author": "khaled",
+      "remote_path": "data/oop1/books/oop_part1.pdf",
+      "catalog": "books"
+    },
+    {
+      "name": "oop part2.pdf",
+      "version": "1.0.0",
+      "author": "khaled",
+      "remote_path": "data/oop1/books/oop_part2.pdf",
+      "catalog": "books"
+    }
+  ]
+}

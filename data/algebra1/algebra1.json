@@ -4,10 +4,10 @@
   "remote_path": "data/algebra1/",
   "items": [
     {
-      "name": "algebra1",
+      "name": "algebra1_book.pdf",
       "version": "1.0.0",
       "author": "khaled",
-      "remote_path": "data/algebra1/books/DiscreteStructures.pdf",
+      "remote_path": "data/algebra1/books/algebra.pdf",
       "catalog": "books"
     }
   ]
