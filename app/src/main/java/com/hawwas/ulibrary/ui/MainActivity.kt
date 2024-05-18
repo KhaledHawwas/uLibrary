@@ -32,16 +32,14 @@ class MainActivity: AppCompatActivity() {
         )
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val itemSubjectAdapter = ItemSubjectAdapter(androidDownloader)
+        val itemSubjectAdapter = ItemSubjectAdapter(
+            appDataRepo, remoteRepo, localStorage, appDataRepo.getSubjectsLive(), this
+        )
         binding.subjectsRv.adapter = itemSubjectAdapter
         binding.subjectsRv.layoutManager = LinearLayoutManager(this)
-        appDataRepo.getSubjectsLive().observe(this) {
-            itemSubjectAdapter.subjects = it
-            itemSubjectAdapter.notifyDataSetChanged()
-        }
 
         val subjects = localStorage.loadLocalSubjects()
-        Log.d(TAG, "onCreate: subjects: $subjects")
+        Log.d(TAG, "subjects: $subjects")
 
 
         if (subjects.isEmpty()) {

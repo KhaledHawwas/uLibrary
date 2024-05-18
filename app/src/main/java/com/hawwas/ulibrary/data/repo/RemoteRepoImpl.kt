@@ -11,8 +11,8 @@ import retrofit2.Response
 import java.io.*
 import javax.inject.*
 
-class RemoteRepoImpl: RemoteRepo {
-    @Inject lateinit var downloader: AndroidDownloader
+class RemoteRepoImpl @Inject constructor(private var downloader: AndroidDownloader): RemoteRepo {
+
 
     private val downloadService: GithubDownloadService = Retrofit.Builder()
         .baseUrl(RemoteRepo.baseGithubUrl)
@@ -49,13 +49,24 @@ class RemoteRepoImpl: RemoteRepo {
         downloader.downloadFile(url, toPath)
     }
 
+    override fun downloadItem(item: Item) {
+        if (item.downloaded != DownloadStatus.NOT_STARTED)
+            return
+        item.downloaded = DownloadStatus.DOWNLOADING
+        downloadFile(
+            RemoteRepo.getItemPath(item),
+            LocalStorage.getItemPath(item)
+        )
+    }
+
     override fun downloadSubject(subject: Subject) {
         for (item in subject.items) {
             if (item.downloaded != DownloadStatus.NOT_STARTED)
                 continue
+            item.downloaded = DownloadStatus.DOWNLOADING
             downloadFile(
                 RemoteRepo.baseGithubUrl + RemoteRepo.repoUrl + item.remotePath,
-                LocalStorage.rootDir + item.filePath
+                LocalStorage.getItemPath(item)
             )
         }
     }

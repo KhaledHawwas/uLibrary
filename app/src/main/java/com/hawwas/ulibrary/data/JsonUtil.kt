@@ -31,15 +31,37 @@ fun toSubject(json: String): Subject {
             jsonItem.getString("author"),
             jsonItem.getString("catalog"),
             jsonItem.getString("version"),
-            jsonItem.getString("remote_path")
+            jsonItem.getString("remote_path"),
+            name
         )
-        if (!jsonItem.has("file_path"))
-            item.filePath = name + "/" + item.getCatalogDir() + item.name
-        else
-            item.filePath = jsonItem.getString("file_path")
+        if (jsonItem.has("last_watched"))
+            item.lastWatched = jsonItem.getLong("last_watched")
+        if (jsonItem.has("starred"))
+            item.starred = jsonItem.getBoolean("starred")
+
 
         itemsList.add(item)
     }
     return Subject(version, name, remotePath, itemsList)
 }
 
+fun subjectToJson(subject: Subject): String {
+    val jsonObject = JSONObject()
+    jsonObject.put("version", subject.version)
+    jsonObject.put("name", subject.name)
+    jsonObject.put("remote_path", subject.remotePath)
+    val items = JSONArray()
+    subject.items.forEach {
+        val jsonItem = JSONObject()
+        jsonItem.put("name", it.name)
+        jsonItem.put("author", it.author)
+        jsonItem.put("catalog", it.catalog)
+        jsonItem.put("version", it.version)
+        jsonItem.put("remote_path", it.remotePath)
+        jsonItem.put("last_watched", it.lastWatched)
+        jsonItem.put("starred", it.starred)
+        items.put(jsonItem)
+    }
+    jsonObject.put("items", items)
+    return jsonObject.toString()
+}

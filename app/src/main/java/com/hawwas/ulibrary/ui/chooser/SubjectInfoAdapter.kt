@@ -13,9 +13,10 @@ class SubjectInfoAdapter:
         RecyclerView.ViewHolder(binding.root) {
         fun bind(subjectHeader: SubjectHeader) {
             binding.subjectName.text = subjectHeader.name
-            binding.subjectSelectedCB.isChecked = subjectHeader.selected
+            binding.subjectSelectedCB.isChecked = subjectHeader.selected//TODO: fix
             binding.subjectSelectedCB.setOnClickListener {
                 subjectHeader.selected = binding.subjectSelectedCB.isChecked
+
             }
         }
 

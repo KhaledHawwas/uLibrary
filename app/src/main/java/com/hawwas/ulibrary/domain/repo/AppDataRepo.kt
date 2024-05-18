@@ -7,7 +7,7 @@ interface AppDataRepo {
     fun getSubjectsInfo(): LiveData<List<SubjectHeader>>
     fun updateSubjectsInfo(ls: List<SubjectHeader>)
     fun getSubjectsLive(): LiveData<List<Subject>>
-    fun getSubjects(): List<Subject>
     fun updateSubject(subject: Subject)
     fun updateSubjects(subjects: List<Subject>)
+    fun downloadedItem(): MutableLiveData<String>
 }

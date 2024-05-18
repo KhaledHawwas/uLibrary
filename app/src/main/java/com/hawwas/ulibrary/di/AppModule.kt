@@ -34,7 +34,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRemoteRepo(): RemoteRepo {
-        return RemoteRepoImpl()
+    fun provideRemoteRepo(androidDownloader: AndroidDownloader): RemoteRepo {
+        return RemoteRepoImpl(androidDownloader)
     }
 }

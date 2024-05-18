@@ -7,13 +7,11 @@ import com.hawwas.ulibrary.model.*
 class AppDataRepoImpl: AppDataRepo {
     private val subjectsInfoLive = MutableLiveData<List<SubjectHeader>>()
     private val selectedSubjectsLive = MutableLiveData<List<Subject>>()
-    private var selectedSubjects = mutableListOf<Subject>()
+    private val downloadedItemLive = MutableLiveData<String>()
 
     init {
-        selectedSubjectsLive.observeForever { ls ->
-            selectedSubjects = ls.toMutableList()
-        }
-
+        selectedSubjectsLive.observeForever {}
+        subjectsInfoLive.observeForever {}
     }
 
     override fun updateSubjects(subjects: List<Subject>) {
@@ -32,17 +30,24 @@ class AppDataRepoImpl: AppDataRepo {
         return selectedSubjectsLive
     }
 
-    override fun getSubjects(): List<Subject> {
-        return selectedSubjects
+    override fun downloadedItem(): MutableLiveData<String> {
+        return downloadedItemLive
     }
+
 
     override fun updateSubject(subject: Subject) {
         val ls = selectedSubjectsLive.value?.toMutableList() ?: mutableListOf()
-        if (ls.contains(subject)) {
-            ls.remove(subject)
+        val index = ls.indexOf(subject)
+        if (index != -1) {
+            ls[index] = subject
+            selectedSubjectsLive.postValue(ls)
+        } else {
+            ls.add(subject)
+            selectedSubjectsLive.value = ls
         }
-        ls.add(subject)
-        selectedSubjectsLive.postValue(ls)
+    }
 
+    companion object {
+        private const val TAG = "KH_AppDataRepoImpl"
     }
 }

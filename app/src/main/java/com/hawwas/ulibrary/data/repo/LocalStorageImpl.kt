@@ -1,7 +1,6 @@
 package com.hawwas.ulibrary.data.repo
 
 import android.content.*
-import android.util.*
 import com.hawwas.ulibrary.data.*
 import com.hawwas.ulibrary.domain.repo.*
 import com.hawwas.ulibrary.domain.repo.LocalStorage.Companion.rootDir
@@ -13,6 +12,20 @@ class LocalStorageImpl(context: Context): LocalStorage {
     private val appDir = context.externalMediaDirs.first()!!
     private val cashDir = context.cacheDir!!
     private val dataStoreManager = DataStoreManager(context)
+    override fun updateDownloaded(item: Item) {
+        val itemFile = File(appDir, LocalStorage.getItemPath(item))
+        item.downloaded =
+            if (itemFile.exists()) DownloadStatus.DOWNLOADED else DownloadStatus.NOT_STARTED
+    }
+
+    override fun saveSubjectData(subject: Subject) {
+        val file = File(appDir, LocalStorage.getSubjectFile(subject))
+        try {
+            file.writeText(subjectToJson(subject))
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
 
     override fun saveFile(folderName: String, fileName: String, data: ByteArray) {
         val folder = File(appDir, folderName)
@@ -43,22 +56,17 @@ class LocalStorageImpl(context: Context): LocalStorage {
     override fun loadLocalSubjects(): List<Subject> {
         val subjectFile = File(appDir, rootDir + subjectsDir)
         val subjectFiles = subjectFile.listFiles()
-        Log.d(TAG, "loadLocalSubjects: ${subjectFile.absolutePath}")
         val subjects = mutableListOf<Subject>()
         subjectFiles?.forEach {
-            Log.d(TAG, "${it.absolutePath + "//" + LocalStorage.subjectFile}: ")
             if (!it.isDirectory) {
                 return@forEach
             }
             val subjectJson =
-                getFileContent(it.absolutePath + "//" + LocalStorage.subjectFile) ?: return@forEach
+                getFileContent(it.absolutePath + "/" + LocalStorage.subjectFile) ?: return@forEach
             val subject = toSubject(subjectJson)
             subjects.add(subject)
             for (item in subject.items) {
-                val itemFile =
-                    File(it, item.getCatalogDir() + item.name)//TODO: check if it is correct
-                item.downloaded =
-                    if (itemFile.exists()) DownloadStatus.DOWNLOADED else DownloadStatus.FAILED
+                updateDownloaded(item)
             }
 
         }

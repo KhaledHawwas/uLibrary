@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black_c70">#99000000</color>
 
-    <color name="blue_300">#9965f4</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_100" >#DCDCDC</color>
+    <color name="white_c70">#B3FFFFFF</color>
+
     <color name="blue_200">#b297f8</color>
+    <color name="blue_300">#9965f4</color>
     <color name="blue_500">#6002ee</color>
+    <color name="blue_600">#4d00e0</color>
     <color name="blue_700">#0000ff</color>
 
     <color name="purple_400">#d602ee</color>

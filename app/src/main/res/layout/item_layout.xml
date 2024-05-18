@@ -2,22 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemLayout"
     android:layout_width="match_parent"
     android:layout_height="135dp">
 
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/itemDownloadBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+
         android:src="@drawable/download_24px"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+        app:layout_constraintEnd_toEndOf="@+id/itemAuthorTv"
+        app:layout_constraintStart_toStartOf="@+id/itemAuthorTv"
+        app:layout_constraintTop_toBottomOf="@+id/itemAuthorTv" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/itemNameTv"
         android:layout_width="95dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -28,34 +30,52 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="130dp"
-        android:layout_height="133dp"
+        android:id="@+id/item_preview_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/itemAuthorTv"
+        app:layout_constraintStart_toEndOf="@+id/itemNameTv"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5">
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/itemAuthorTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
         android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/ratingBar"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/starBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="50dp"
-        android:layout_height="44dp"
+    <TextView
+        android:id="@+id/itemSizeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@+id/itemDownloadBtn"
+        app:layout_constraintStart_toStartOf="@+id/itemDownloadBtn"
+        app:layout_constraintTop_toBottomOf="@+id/itemDownloadBtn" />
+
+    <ImageButton
+        android:id="@+id/starBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:numStars="1"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/round_shape"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/star_off_24px" />
 </androidx.constraintlayout.widget.ConstraintLayout>
