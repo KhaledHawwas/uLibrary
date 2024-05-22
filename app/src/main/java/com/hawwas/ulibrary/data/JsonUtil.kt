@@ -4,7 +4,7 @@ import com.hawwas.ulibrary.model.*
 import org.json.*
 
 private const val TAG = "KH_JsonUtil"
-fun toSubjectsInfoList(json: String): List<SubjectHeader> {
+fun toSubjectsHeaderList(json: String): List<SubjectHeader> {
     val subjects = mutableListOf<SubjectHeader>()
     val jsonArray = JSONObject(json).getJSONArray("subjects")
     for (i in 0 until jsonArray.length()) {

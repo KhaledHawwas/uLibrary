@@ -19,7 +19,7 @@ class RemoteRepoImpl @Inject constructor(private var downloader: AndroidDownload
         .build()
         .create(GithubDownloadService::class.java)
 
-    override fun fetchFileFromRepo(remotePath: String, callback: MyCallback) {
+    override fun contentFromRepo(remotePath: String, callback: MyCallback) {
         val call = downloadService.downloadFile(RemoteRepo.repoUrl + remotePath)
         call.enqueue(object: Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -27,14 +27,11 @@ class RemoteRepoImpl @Inject constructor(private var downloader: AndroidDownload
                     val fileResponse = response.body()
                     if (fileResponse != null) {
                         callback.success(fileResponse.string())
+                    } else {
+                        callback.failure(IOException("Empty response"))
                     }
                 } else {
-                    callback.failure(
-                        IOException(
-                            "Error: " + response.code() + ", " + response.message()
-                                    + ", " + remotePath
-                        )
-                    )
+                    callback.failure(IOException("${response.code()}"))
                 }
             }
 
@@ -49,14 +46,12 @@ class RemoteRepoImpl @Inject constructor(private var downloader: AndroidDownload
         downloader.downloadFile(url, toPath)
     }
 
-    override fun downloadItem(item: Item) {
+    override fun downloadItem(item: Item): Boolean {
         if (item.downloaded != DownloadStatus.NOT_STARTED)
-            return
+            return false
         item.downloaded = DownloadStatus.DOWNLOADING
-        downloadFile(
-            RemoteRepo.getItemPath(item),
-            LocalStorage.getItemPath(item)
-        )
+        downloadFile(RemoteRepo.getItemPath(item), LocalStorage.getItemPath(item))
+        return true
     }
 
     override fun downloadSubject(subject: Subject) {

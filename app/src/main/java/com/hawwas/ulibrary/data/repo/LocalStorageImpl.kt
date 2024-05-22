@@ -12,6 +12,7 @@ class LocalStorageImpl(context: Context): LocalStorage {
     private val appDir = context.externalMediaDirs.first()!!
     private val cashDir = context.cacheDir!!
     private val dataStoreManager = DataStoreManager(context)
+
     override fun updateDownloaded(item: Item) {
         val itemFile = File(appDir, LocalStorage.getItemPath(item))
         item.downloaded =
@@ -32,7 +33,11 @@ class LocalStorageImpl(context: Context): LocalStorage {
         if (!folder.exists()) {
             folder.mkdirs()
         }
-        val file = File(folder, fileName)
+        saveFile(folder.absolutePath + "/" + fileName, data)
+    }
+
+    override fun saveFile(fileName: String, data: ByteArray) {
+        val file = File(appDir, fileName)
         try {
             file.writeBytes(data)
         } catch (e: IOException) {
@@ -40,7 +45,7 @@ class LocalStorageImpl(context: Context): LocalStorage {
         }
     }
 
-    override fun saveCacheFile(folderName: String, fileName: String, data: ByteArray) {
+    override fun saveCache(folderName: String, fileName: String, data: ByteArray) {
         val folder = File(cashDir, folderName)
         if (!folder.exists()) {
             folder.mkdirs()

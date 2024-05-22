@@ -15,8 +15,8 @@ interface RemoteRepo {
         const val subjectsHeaderAbs = rootDataDir + "subjectsInfo.json"
     }
 
-    fun fetchFileFromRepo(remotePath: String, callback: MyCallback)
+    fun contentFromRepo(remotePath: String, callback: MyCallback)
     fun downloadFile(url: String, toPath: String)
     fun downloadSubject(subject: Subject)
-    fun downloadItem(item: Item)
+    fun downloadItem(item: Item): Boolean
 }

@@ -5,25 +5,25 @@ import com.hawwas.ulibrary.domain.repo.*
 import com.hawwas.ulibrary.model.*
 
 class AppDataRepoImpl: AppDataRepo {
-    private val subjectsInfoLive = MutableLiveData<List<SubjectHeader>>()
+    private val headersLive = MutableLiveData<List<SubjectHeader>>()
     private val selectedSubjectsLive = MutableLiveData<List<Subject>>()
     private val downloadedItemLive = MutableLiveData<String>()
 
     init {
         selectedSubjectsLive.observeForever {}
-        subjectsInfoLive.observeForever {}
+        headersLive.observeForever {}
     }
 
     override fun updateSubjects(subjects: List<Subject>) {
         selectedSubjectsLive.postValue(subjects)
     }
 
-    override fun getSubjectsInfo(): LiveData<List<SubjectHeader>> {
-        return subjectsInfoLive
+    override fun getHeaders(): MutableLiveData<List<SubjectHeader>> {
+        return headersLive
     }
 
-    override fun updateSubjectsInfo(ls: List<SubjectHeader>) {
-        subjectsInfoLive.postValue(ls)
+    override fun updateHeaders(ls: List<SubjectHeader>) {
+        headersLive.postValue(ls)
     }
 
     override fun getSubjectsLive(): LiveData<List<Subject>> {
