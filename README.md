@@ -1,9 +1,9 @@
 # U Library 
 
 ## Description
-An kotlin app downloads and manage university materials and explore it easily.
+A Kotlin app that downloads and manages university materials and explores them easily.
 
-to contribute see:[contributing](CONTRIBUTING.md)
+To contribute, see: [contributing](CONTRIBUTING.md).
 
 ## Features
 - Downloads data using retrofit and store it in cache and external storage.
