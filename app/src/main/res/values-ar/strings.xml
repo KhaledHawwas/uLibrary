@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ULibrary</string>
+    <string name="save">أحفظ</string>
+    <string name="downloading">يتم تحميل</string>
+    <string name="select_your_subjects">أختر مادتك</string>
+    <string name="no_internet_connection">لايوجد اتصال بالانترنت</string>
+    <string name="you_reach_your_limit_try_again_later">لقد تخطيت حد التحميل, حاول لاحقا</string>
+    <string name="unknown_error">خطأ غير معروف</string>
+    <string name="choose_your_subjects">أختار مادتك</string>
+    <string name="refresh">إعادة التحميل</string>
+    <string name="years_ago">منذ %1$l اعوام</string>
+    <string name="months_ago">منذ %1$l أشهر</string>
+    <string name="days_ago">منذ %1$l أيام</string>
+    <string name="hours_ago">منذ %1$l ساعات</string>
+    <string name="minutes_ago">منذ %1$l دقائق</string>
+    <string name="seconds_ago">منذ %1$l ثواني</string>
+</resources>

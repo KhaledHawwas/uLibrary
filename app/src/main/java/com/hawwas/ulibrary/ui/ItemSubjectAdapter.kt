@@ -16,7 +16,7 @@ class ItemSubjectAdapter(
     var remoteRepo: RemoteRepo,
     val localStorage: LocalStorage,
     var subjects: LiveData<List<Subject>>,
-    val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner
 ):
     RecyclerView.Adapter<ItemSubjectAdapter.ViewHolder>() {
     private lateinit var parent: ViewGroup
@@ -48,12 +48,29 @@ class ItemSubjectAdapter(
                 else R.drawable.download_24px
             )
             binding.booksBtn.setOnClickListener {
-                Intent(parent.context, ItemsSelectorActivity::class.java).also {
-                    it.putExtra("selectedItems", subject.name + "/books")
-                    parent.context.startActivity(it)
-                }
+                openCategory(subject.name + "/books")
+            }
+            binding.examsBtn.setOnClickListener {
+                openCategory(subject.name + "/exams")
+            }
+            binding.lecturesBtn.setOnClickListener {
+                openCategory(subject.name + "/lectures")
+            }
+            binding.sectionsBtn.setOnClickListener {
+                openCategory(subject.name + "/sections")
+            }
+            binding.revisionsBtn.setOnClickListener {
+                openCategory(subject.name + "/revision")
             }
 
+
+
+        }
+       private fun openCategory(category: String) {
+            Intent(parent.context, ItemsSelectorActivity::class.java).also {
+                it.putExtra("selectedItems", category)
+                parent.context.startActivity(it)
+            }
         }
 
     }

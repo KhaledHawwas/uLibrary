@@ -1,14 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.ULibrary" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/blue_500</item>
-        <item name="colorPrimaryVariant">@color/blue_300</item>
+        <item name="colorPrimary">@color/blue_300</item>
+        <item name="colorPrimaryVariant">@color/blue_200</item>
         <item name="colorSecondary">@color/green_500</item>
-        <item name="colorSecondaryVariant">@color/green_700</item>
+        <item name="colorSecondaryVariant">@color/green_300</item>
         <item name="android:textColor">@color/white</item>
         <item name="colorControlNormal">@color/white</item>
-
     </style>
+
+    <!-- Helper text style. -->
     <style name="helper_text" parent="android:TextAppearance.SearchResult.Subtitle">
         <item name="android:textColor">@color/white_c70</item>
         <item name="android:textSize">12sp</item>

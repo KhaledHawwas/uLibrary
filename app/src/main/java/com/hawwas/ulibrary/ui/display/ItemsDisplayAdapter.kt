@@ -35,7 +35,6 @@ class ItemsDisplayAdapter(
                 val itemName = it.substringAfterLast('/')
                 items.find { item -> item.name == itemName }?.downloaded = DownloadStatus.DOWNLOADED
                 notifyDataSetChanged()//TODO: optimize
-                Log.d(TAG, "notifyDataSetChanged:")
             } catch (e: IllegalStateException) {
                 Log.e(TAG, "onCreateViewHolder: ", e)
             }
@@ -54,24 +53,23 @@ class ItemsDisplayAdapter(
 
         fun bind(item: Item) {
             binding.apply {
-                itemNameTv.text = item.name
+                itemNameTv.text = item.name.substringBefore('.')
                 itemAuthorTv.text = item.author
-
                 itemDownloadBtn.setOnClickListener {
-                    remoteRepo.downloadItem(item)
-                    updateDownloadIcon(item)
+                    if (!remoteRepo.downloadItem(item)) {
+                        openItem(item)
+                    } else updateDownloadIcon(item)
                 }
+
                 updateDownloadIcon(item)
-
                 updateStarred(item.starred)
-
                 starBtn.setOnClickListener {
                     item.starred = !item.starred
                     updateStarred(item.starred)
                 }
-
                 itemPreviewLayout.setOnClickListener { openItem(item) }
                 itemLayout.setOnClickListener { openItem(item) }
+                lastWatchedTv.text = getLastWatched(item.lastWatched,this.root.context)
             }
         }
 
@@ -90,19 +88,15 @@ class ItemsDisplayAdapter(
                 remoteRepo.downloadItem(item)
                 return
             }
-
+            item.lastWatched = System.currentTimeMillis()
             val uri = FileProvider.getUriForFile(
-                parent.context,
-                "${BuildConfig.APPLICATION_ID}.fileprovider",
-                File(
+                parent.context, "${BuildConfig.APPLICATION_ID}.fileprovider", File(
                     Environment.getExternalStorageDirectory(),
                     "Android/media/${BuildConfig.APPLICATION_ID}/${LocalStorage.getItemPath(item)}"
                 )
             )
 
             val mime = getMIMEType(item.name.substringAfterLast('.'))
-            Log.d(TAG, "openItem: $mime")
-
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 setDataAndType(uri, mime)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

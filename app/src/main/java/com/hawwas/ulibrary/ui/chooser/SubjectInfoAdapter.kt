@@ -1,22 +1,30 @@
 package com.hawwas.ulibrary.ui.chooser
 
 import android.view.*
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.hawwas.ulibrary.databinding.*
 import com.hawwas.ulibrary.model.*
 
-class SubjectInfoAdapter:
+class SubjectInfoAdapter(var subjectsInfo: MutableLiveData<List<SubjectHeader>> ):
     RecyclerView.Adapter<SubjectInfoAdapter.ViewHolder>() {
-    var subjectsInfo: List<SubjectHeader> = emptyList()
+        init{
+            subjectsInfo.observeForever {
+             try {
+                 notifyDataSetChanged()
+             }catch (e: Exception){}//TODO: find reason
+            }
+        }
 
-    class ViewHolder(private val binding: ItemSubjectInfoBinding):
+
+    inner class ViewHolder(private val binding: ItemSubjectInfoBinding):
         RecyclerView.ViewHolder(binding.root) {
         fun bind(subjectHeader: SubjectHeader) {
             binding.subjectName.text = subjectHeader.name
             binding.subjectSelectedCB.isChecked = subjectHeader.selected//TODO: fix
             binding.subjectSelectedCB.setOnClickListener {
                 subjectHeader.selected = binding.subjectSelectedCB.isChecked
-
+                subjectsInfo.value = subjectsInfo.value //  to trigger observer
             }
         }
 
@@ -32,10 +40,12 @@ class SubjectInfoAdapter:
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(subjectsInfo[position])
+        holder.bind(subjectsInfo.value!![position])
     }
 
     override fun getItemCount(): Int {
-        return subjectsInfo.size
+        return subjectsInfo.value?.size ?: 0
     }
+
+
 }

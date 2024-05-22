@@ -8,11 +8,12 @@
     tools:context=".ui.MainActivity">
 
     <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:id="@+id/settingBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+
         android:src="@drawable/settings_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,20 +35,47 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2">
+        app:layout_constraintTop_toBottomOf="@+id/settingBtn">
 
         <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="40dp"
+            android:id="@+id/notionBtn"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:backgroundTint="?attr/colorSecondaryVariant"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_launcher_foreground" />
+            app:srcCompat="@drawable/notion_seeklogo"
+          />
+
+        <ImageButton
+            android:id="@+id/driveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:backgroundTint="?attr/colorSecondaryVariant"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/notionBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/google_drive" />
+
+        <ImageButton
+            android:id="@+id/botBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="?attr/colorSecondaryVariant"
+            app:tint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/notionBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bot_24px" />
+        />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

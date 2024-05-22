@@ -1,18 +1,19 @@
 package com.hawwas.ulibrary.ui
 
 import android.content.*
+import android.net.*
 import android.os.*
-import android.util.*
 import androidx.appcompat.app.*
 import androidx.recyclerview.widget.*
+import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.data.remote.*
 import com.hawwas.ulibrary.databinding.*
 import com.hawwas.ulibrary.domain.repo.*
 import com.hawwas.ulibrary.ui.chooser.*
+import com.hawwas.ulibrary.ui.settings.*
 import dagger.hilt.android.*
 import javax.inject.*
 
-private const val TAG = "KH_MainActivity"
 
 @AndroidEntryPoint
 class MainActivity: AppCompatActivity() {
@@ -37,18 +38,39 @@ class MainActivity: AppCompatActivity() {
         )
         binding.subjectsRv.adapter = itemSubjectAdapter
         binding.subjectsRv.layoutManager = LinearLayoutManager(this)
-
+        binding.notionBtn.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, notionUri))
+        }
+        binding.settingBtn.setOnClickListener {
+            Intent(this, SettingActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+        binding.driveBtn.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, driveUri))
+        }
+        binding.botBtn.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, botUri))
+        }
         val subjects = localStorage.loadLocalSubjects()
-        Log.d(TAG, "subjects: $subjects")
-
 
         if (subjects.isEmpty()) {
+            MyLog.d(MyLog.MyTag.NO_SUBJECTS)
             Intent(this@MainActivity, SubjectChooserActivity::class.java).also {
                 startActivity(it)
             }
         } else {
             appDataRepo.updateSubjects(subjects)
         }
+    }
+
+    companion object {
+        private const val TAG = "KH_MainActivity"
+        private val notionUri =
+            Uri.parse("https://respected-afternoon-b58.notion.site/FCAI-Level-1-second-term-f81b1674cfd248808eaf49a25d8598b3")
+        private val driveUri =
+            Uri.parse("https://drive.google.com/drive/folders/1SKRh0u48DpNvHQYMJx3tClRmVghspbXL")
+        private val botUri = Uri.parse("https://t.me/FCAlFMbot")
     }
 
 }

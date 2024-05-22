@@ -52,7 +52,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
-        android:text="TextView"
+        android:textColor="@null"
+        android:text="error"
         android:textSize="10sp"
         app:layout_constraintEnd_toStartOf="@+id/starBtn"
         app:layout_constraintTop_toTopOf="parent" />
@@ -62,8 +63,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:textColor="@null"
         android:text="TextView"
-        android:textSize="11sp"
+        android:textAppearance="@style/helper_text"
         app:layout_constraintEnd_toEndOf="@+id/itemDownloadBtn"
         app:layout_constraintStart_toStartOf="@+id/itemDownloadBtn"
         app:layout_constraintTop_toBottomOf="@+id/itemDownloadBtn" />
@@ -78,4 +80,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/star_off_24px" />
+
+    <TextView
+        android:id="@+id/lastWatchedTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textAlignment="textStart"
+        android:textAppearance="@style/helper_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemNameTv" />
 </androidx.constraintlayout.widget.ConstraintLayout>

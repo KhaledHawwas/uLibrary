@@ -20,9 +20,9 @@ class ItemsSelectorActivity: AppCompatActivity() {
     @Inject lateinit var appDataRepo: AppDataRepo
     @Inject lateinit var localStorage: LocalStorage
 
-    lateinit var selectedSubject: Subject
-    lateinit var selectedCategory: String
-    lateinit var selectedItems: List<Item>
+   private lateinit var selectedSubject: Subject
+    private     lateinit var selectedCategory: String
+    private     lateinit var selectedItems: List<Item>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,6 @@ class ItemsSelectorActivity: AppCompatActivity() {
         binding.categoryTitleTv.text = selectedCategory
         binding.itemsRv.adapter = itemsDisplayAdapter
         binding.itemsRv.layoutManager = LinearLayoutManager(this)
-
     }
 
 
@@ -61,7 +60,7 @@ class ItemsSelectorActivity: AppCompatActivity() {
                 ?.find { subject -> subject.name == selectedSubjectName }
                 ?.items?.filter { item -> item.catalog == selectedCategory }
                 ?: emptyList()
-            selectedSubject = appDataRepo.getSubjectsLive().value!!.firstOrNull() {
+            selectedSubject = appDataRepo.getSubjectsLive().value!!.firstOrNull {
                 it.name == selectedSubjectName
             } ?: throw IllegalArgumentException("Subject not found")
         } ?: throw IllegalArgumentException("Invalid extra")

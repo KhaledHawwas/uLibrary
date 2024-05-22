@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MyApp"
@@ -14,8 +14,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ULibrary"
+        android:theme="@style/Base.Theme.ULibrary"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.settings.SettingActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.display.ItemsSelectorActivity"
             android:exported="false" />
@@ -31,6 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.hawwas.ulibrary.fileprovider"
@@ -40,6 +44,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <receiver
             android:name=".data.DownloadReceiver"
             android:exported="true">

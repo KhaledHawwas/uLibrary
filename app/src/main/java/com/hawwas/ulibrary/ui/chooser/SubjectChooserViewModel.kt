@@ -1,7 +1,7 @@
 package com.hawwas.ulibrary.ui.chooser
 
-import android.util.*
 import androidx.lifecycle.*
+import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.data.*
 import com.hawwas.ulibrary.data.remote.*
 import com.hawwas.ulibrary.domain.repo.*
@@ -10,7 +10,6 @@ import dagger.hilt.android.lifecycle.*
 import kotlinx.coroutines.*
 import javax.inject.*
 
-const val day = 1000 * 60 * 60 * 24
 @HiltViewModel
 class SubjectChooserViewModel @Inject constructor(): ViewModel() {
     @Inject lateinit var appDataRepo: AppDataRepo
@@ -19,22 +18,24 @@ class SubjectChooserViewModel @Inject constructor(): ViewModel() {
 
     @Inject lateinit var appStorage: LocalStorage
 
-    fun getSubjectsInfo(): LiveData<List<SubjectHeader>> {
-        val content = appStorage.getFileContent(LocalStorage.subjectsInfoAbs)
+    fun getHeaders(failure: (Throwable) -> Unit): MutableLiveData<List<SubjectHeader>> {
+        val content = appStorage.getFileContent(LocalStorage.HeadersAbs)
         if (content != null) {
             CoroutineScope(Dispatchers.Main).launch {
                 val time = appStorage.getLastFetchedTime()
                 if (System.currentTimeMillis() - time > day) {
-                    Log.d(TAG, "getSubjectsInfo: updating subjects info")
-                    subjectsFromRemote()
+                    MyLog.d(MyLog.MyTag.HEADER_OUT_OF_DATE, TAG)
+                    headersFromRemote(failure)
                 } else {
-                    Log.d(TAG, "getSubjectsInfo: from local storage")
-                    appDataRepo.updateSubjectsInfo(toSubjectsInfoList(content))
+                    MyLog.d(MyLog.MyTag.SUBJECTS_LOADED, TAG, content)
+                    appDataRepo.updateHeaders(toSubjectsHeaderList(content))
                 }
+                //TODO: save it in the file
             }
-            return appDataRepo.getSubjectsInfo()
+            return appDataRepo.getHeaders()
         } else {
-            return subjectsFromRemote()
+            MyLog.d(MyLog.MyTag.NO_HEADERS)
+            return headersFromRemote(failure)
         }
 
     }
@@ -42,35 +43,32 @@ class SubjectChooserViewModel @Inject constructor(): ViewModel() {
     /**
      * Fetch subjects headers from remote storage and save it to local storage
      */
-    private fun subjectsFromRemote(): LiveData<List<SubjectHeader>> {
-        Log.d(TAG, "getSubjectsInfo: from remote storage")
+    private fun headersFromRemote(
+        e : (Throwable) -> Unit = {MyLog.d(MyLog.MyTag.LAZY_IO, TAG, it.message?:"null")}
+    ): MutableLiveData<List<SubjectHeader>> {
         CoroutineScope(Dispatchers.Main).launch {
             appStorage.saveLastFetchedTime(System.currentTimeMillis())
+            //TODO: save it in the file
         }
-        remoteRepo.fetchFileFromRepo(RemoteRepo.subjectsHeaderAbs, MyCallback({ data ->
-            appStorage.saveCacheFile(
+        remoteRepo.contentFromRepo(RemoteRepo.subjectsHeaderAbs, MyCallback({ data ->
+            val subjects = toSubjectsHeaderList(data)
+            appStorage.saveCache(
                 "./", LocalStorage.subjectsHeaderFile, data.toByteArray()
             )
-            val subjects = toSubjectsInfoList(data)
-            Log.d(TAG, "$subjects")
-            appDataRepo.updateSubjectsInfo(subjects)
-            Log.d(TAG, "getSubjectsInfo: from remote storage success")
-        }))
-        return appDataRepo.getSubjectsInfo()
+            appDataRepo.updateHeaders(subjects)
+            MyLog.d(MyLog.MyTag.HEADERS_FETCHED, TAG, data)
+        },e))
+        return appDataRepo.getHeaders()
     }
 
-    fun saveSubjects(subjectsInfo: List<SubjectHeader>) {
-        for (subjectInfo in subjectsInfo) {
-            remoteRepo.fetchFileFromRepo(subjectInfo.remotePath, MyCallback({ data ->
+    fun saveSubjects(headers: List<SubjectHeader>) {
+        for (subjectInfo in headers) {
+            remoteRepo.contentFromRepo(subjectInfo.remotePath, MyCallback({ data ->
                 val subject = toSubject(data)
-                appStorage.saveFile(
-                    LocalStorage.rootDir + LocalStorage.subjectsDir + subject.name,
-                    LocalStorage.subjectFile,
-                    data.toByteArray()
-                )
+                MyLog.d(MyLog.MyTag.SAVING_SUBJECT, TAG, subject.name)
+                appStorage.saveSubjectData(subject)
                 appDataRepo.updateSubject(subject)
-            }, { exception ->
-                exception.printStackTrace()
+
             }))
         }
 
@@ -78,6 +76,8 @@ class SubjectChooserViewModel @Inject constructor(): ViewModel() {
 
     companion object {
         private const val TAG = "KH_SubjectChooserVM"
+        const val day = 1000 * 60 * 60 * 24
+
     }
 
 }
