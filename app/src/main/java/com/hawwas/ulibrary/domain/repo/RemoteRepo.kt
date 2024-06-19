@@ -9,7 +9,7 @@ interface RemoteRepo {
             return baseGithubUrl + repoUrl + item.remotePath
         }
 
-        const val repoUrl = "KhaledHawwas/uLibrary/master/"
+        const val repoUrl = "bookgames/uLibrary/master/"
         const val baseGithubUrl = "https://raw.githubusercontent.com/"
         const val rootDataDir = "data/"
         const val subjectsHeaderAbs = rootDataDir + "subjectsInfo.json"
