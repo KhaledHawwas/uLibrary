@@ -8,7 +8,7 @@
       "version": "1.0.0",
       "author": "khaled",
       "remote_path": "data/algebra1/books/algebra.pdf",
-      "catalog": "books"
+      "category": "books"
     }
   ]
 }

@@ -8,14 +8,14 @@
       "version": "1.0.0",
       "author": "khaled",
       "remote_path": "data/oop1/books/oop_part1.pdf",
-      "catalog": "books"
+      "category": "books"
     },
     {
       "name": "oop part2.pdf",
       "version": "1.0.0",
       "author": "khaled",
       "remote_path": "data/oop1/books/oop_part2.pdf",
-      "catalog": "books"
+      "category": "books"
     }
   ]
 }

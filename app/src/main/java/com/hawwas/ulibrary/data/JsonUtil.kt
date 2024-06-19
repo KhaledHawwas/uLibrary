@@ -29,7 +29,7 @@ fun toSubject(json: String): Subject {
         val item = Item(
             jsonItem.getString("name"),
             jsonItem.getString("author"),
-            jsonItem.getString("catalog"),
+            jsonItem.getString("category"),
             jsonItem.getString("version"),
             jsonItem.getString("remote_path"),
             name
@@ -55,7 +55,7 @@ fun subjectToJson(subject: Subject): String {
         val jsonItem = JSONObject()
         jsonItem.put("name", it.name)
         jsonItem.put("author", it.author)
-        jsonItem.put("catalog", it.catalog)
+        jsonItem.put("category", it.category)
         jsonItem.put("version", it.version)
         jsonItem.put("remote_path", it.remotePath)
         jsonItem.put("last_watched", it.lastWatched)

@@ -58,7 +58,7 @@ class ItemsSelectorActivity: AppCompatActivity() {
             selectedCategory = extra[1]
             selectedItems = appDataRepo.getSubjectsLive().value
                 ?.find { subject -> subject.name == selectedSubjectName }
-                ?.items?.filter { item -> item.catalog == selectedCategory }
+                ?.items?.filter { item -> item.category == selectedCategory }
                 ?: emptyList()
             selectedSubject = appDataRepo.getSubjectsLive().value!!.firstOrNull {
                 it.name == selectedSubjectName

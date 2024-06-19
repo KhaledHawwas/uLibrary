@@ -3,7 +3,7 @@ package com.hawwas.ulibrary.model
 data class Item(
     val name: String,
     val author: String,
-    val catalog: String,
+    val category: String,
     var version: String,
     val remotePath: String,
     val subjectName: String,
@@ -12,17 +12,17 @@ data class Item(
     var lastWatched: Long = 0
     var downloaded: DownloadStatus = DownloadStatus.NOT_STARTED
 
-    fun getCatalogDir(): String {
-        return when (catalog) {
+    fun getCategoryDir(): String {
+        return when (category) {
             "sections" -> "sections/"
-            else -> "$catalog/"
+            else -> "$category/"
         }
     }
     /**
      * @return the path from subjects directory including the subject name
      */
     fun getPathFromSubjects(): String {
-        return subjectName + "/" + getCatalogDir() + name
+        return subjectName + "/" + getCategoryDir() + name
     }
 }
 
