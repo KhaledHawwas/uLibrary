@@ -43,7 +43,7 @@ class ItemsSelectorActivity: AppCompatActivity() {
             finish()
             return
         }
-        val itemsDisplayAdapter = ItemsDisplayAdapter(remoteRepo, appDataRepo, this)
+        val itemsDisplayAdapter = ItemsDisplayAdapter(remoteRepo, appDataRepo, this,localStorage)
         itemsDisplayAdapter.items = selectedItems
         binding.subjectTitleTv.text = selectedSubject.name
         binding.categoryTitleTv.text = selectedCategory

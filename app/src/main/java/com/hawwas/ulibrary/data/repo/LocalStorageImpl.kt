@@ -1,6 +1,7 @@
 package com.hawwas.ulibrary.data.repo
 
 import android.content.*
+import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.data.*
 import com.hawwas.ulibrary.domain.repo.*
 import com.hawwas.ulibrary.domain.repo.LocalStorage.Companion.rootDir
@@ -12,6 +13,15 @@ class LocalStorageImpl(context: Context): LocalStorage {
     private val appDir = context.externalMediaDirs.first()!!
     private val cashDir = context.cacheDir!!
     private val dataStoreManager = DataStoreManager(context)
+
+    override fun getItemSize(item: Item): Long {
+        val itemFile = File(appDir, LocalStorage.getItemPath(item))
+        if (!itemFile.exists()) {
+            MyLog.d(MyLog.MyTag.FILE_SHOULD_EXISTS)
+            return 0
+        }
+        return itemFile.length()
+    }
 
     override fun updateDownloaded(item: Item) {
         val itemFile = File(appDir, LocalStorage.getItemPath(item))

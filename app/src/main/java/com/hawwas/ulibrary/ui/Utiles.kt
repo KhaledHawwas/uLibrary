@@ -30,7 +30,7 @@ fun getMIMEType(extension: String): String {
     }
 }
 
-fun getLastWatched(lastTime: Long,context: Context): String {
+fun getLastWatched(lastTime: Long, context: Context): String {
     val currentTime = System.currentTimeMillis()
     val diff = currentTime - lastTime
     val seconds = diff / 1000
@@ -40,11 +40,25 @@ fun getLastWatched(lastTime: Long,context: Context): String {
     val months = days / 30
     val years = months / 12
     return when {
+        //TODO fix it
+        lastTime == 0L -> context.getString(R.string.never_opend)
         years > 0 -> context.getString(R.string.years_ago, years)
-        months > 0 -> context.getString(R.string.months_ago, months)
-        days > 0 -> context.getString(R.string.days_ago, days)
-        hours > 0 -> context.getString(R.string.hours_ago, hours)
-        minutes > 0 -> context.getString(R.string.minutes_ago, minutes)
+        months > 4 -> context.getString(R.string.months_ago, months)
+        days > 4 -> context.getString(R.string.days_ago, days)
+        hours > 4 -> context.getString(R.string.hours_ago, hours)
+        minutes > 4 -> context.getString(R.string.minutes_ago, minutes)
         else -> context.getString(R.string.seconds_ago, seconds)
     }
+}
+
+fun getSize(size: Long): String {
+val kilo= size/1024f
+val mega= kilo/1024f
+val giga= mega/1024f
+    return when{
+        giga>0 -> String.format("%.2f GB",giga)
+        mega>0 -> String.format("%.2f MB",mega)
+        else -> String.format("%.2f KB",kilo)
+    }
+
 }

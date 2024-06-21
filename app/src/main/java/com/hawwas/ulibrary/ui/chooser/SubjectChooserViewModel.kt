@@ -19,7 +19,7 @@ class SubjectChooserViewModel @Inject constructor(): ViewModel() {
     @Inject lateinit var appStorage: LocalStorage
 
     fun getHeaders(failure: (Throwable) -> Unit): MutableLiveData<List<SubjectHeader>> {
-        val content = appStorage.getFileContent(LocalStorage.HeadersAbs)
+        val content = appStorage.getFileContent(LocalStorage.headersAbs)
         if (content != null) {
             CoroutineScope(Dispatchers.Main).launch {
                 val time = appStorage.getLastFetchedTime()

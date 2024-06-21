@@ -25,6 +25,7 @@ object MyLog {
             MyTag.HEADER_OUT_OF_DATE -> Log.d(TAG, "header out of date")
             MyTag.NO_INTERNET -> Log.d(TAG, "no internet")
             MyTag.TIME_LIMIT -> Log.d(TAG, "time limit")
+            MyTag.FILE_SHOULD_EXISTS->Log.d(TAG,"file should exists")
             else -> Log.d(myTag.name, message)
         }
     }
@@ -41,6 +42,7 @@ object MyLog {
         NO_INTERNET,
         TIME_LIMIT,
         UNKNOWN_ERROR,
+        FILE_SHOULD_EXISTS,
 
     }
 }

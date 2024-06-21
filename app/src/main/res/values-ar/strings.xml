@@ -9,10 +9,12 @@
     <string name="unknown_error">خطأ غير معروف</string>
     <string name="choose_your_subjects">أختار مادتك</string>
     <string name="refresh">إعادة التحميل</string>
-    <string name="years_ago">منذ %1$l اعوام</string>
-    <string name="months_ago">منذ %1$l أشهر</string>
-    <string name="days_ago">منذ %1$l أيام</string>
-    <string name="hours_ago">منذ %1$l ساعات</string>
-    <string name="minutes_ago">منذ %1$l دقائق</string>
-    <string name="seconds_ago">منذ %1$l ثواني</string>
+    <string name="years_ago">منذ %1$d اعوام</string>
+    <string name="months_ago">منذ %1$d أشهر</string>
+    <string name="days_ago">منذ %1$d أيام</string>
+    <string name="hours_ago">منذ %1$d ساعات</string>
+    <string name="minutes_ago">منذ %1$d دقائق</string>
+    <string name="seconds_ago">منذ %1$d ثواني</string>
+    <string name="never_opend">لم تفتح</string>
+
 </resources>

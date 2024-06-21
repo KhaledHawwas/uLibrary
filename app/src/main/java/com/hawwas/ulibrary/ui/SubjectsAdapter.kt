@@ -11,14 +11,14 @@ import com.hawwas.ulibrary.domain.repo.*
 import com.hawwas.ulibrary.model.*
 import com.hawwas.ulibrary.ui.display.*
 
-class ItemSubjectAdapter(
+class SubjectsAdapter(
     var appDataRepo: AppDataRepo,
     var remoteRepo: RemoteRepo,
     val localStorage: LocalStorage,
     var subjects: LiveData<List<Subject>>,
     private val lifecycleOwner: LifecycleOwner
 ):
-    RecyclerView.Adapter<ItemSubjectAdapter.ViewHolder>() {
+    RecyclerView.Adapter<SubjectsAdapter.ViewHolder>() {
     private lateinit var parent: ViewGroup
 
     init {

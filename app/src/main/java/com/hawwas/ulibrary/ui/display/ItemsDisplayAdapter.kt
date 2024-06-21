@@ -17,7 +17,8 @@ import java.io.*
 class ItemsDisplayAdapter(
     private val remoteRepo: RemoteRepo,
     private val appDataRepo: AppDataRepo,
-    private val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner,
+    private val localStorage: LocalStorage
 ): RecyclerView.Adapter<ItemsDisplayAdapter.ViewHolder>() {
 
     private lateinit var parent: ViewGroup
@@ -55,6 +56,10 @@ class ItemsDisplayAdapter(
             binding.apply {
                 itemNameTv.text = item.name.substringBefore('.')
                 itemAuthorTv.text = item.author
+                itemSizeTv.text = if (item.downloaded == DownloadStatus.DOWNLOADED) {
+                    getSize(localStorage.getItemSize(item))
+                } else
+                    ""
                 itemDownloadBtn.setOnClickListener {
                     if (!remoteRepo.downloadItem(item)) {
                         openItem(item)
@@ -69,7 +74,7 @@ class ItemsDisplayAdapter(
                 }
                 itemPreviewLayout.setOnClickListener { openItem(item) }
                 itemLayout.setOnClickListener { openItem(item) }
-                lastWatchedTv.text = getLastWatched(item.lastWatched,this.root.context)
+                lastWatchedTv.text = getLastWatched(item.lastWatched, this.root.context)
             }
         }
 

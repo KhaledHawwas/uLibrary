@@ -8,10 +8,11 @@
     <string name="unknown_error">unknown error</string>
     <string name="choose_your_subjects">choose your Subjects</string>
     <string name="refresh">refresh</string>
-    <string name="years_ago">%1$l years ago</string>
-    <string name="months_ago">%1$l months ago</string>
-    <string name="days_ago">%1$l days ago</string>
-    <string name="hours_ago">%1$l hours ago</string>
-    <string name="minutes_ago">%1$l minutes ago</string>
-    <string name="seconds_ago">%1$l seconds ago</string>
+    <string name="years_ago">%1$d years ago</string>
+    <string name="months_ago">%1$d months ago</string>
+    <string name="days_ago">%1$d days ago</string>
+    <string name="hours_ago">%1$d hours ago</string>
+    <string name="minutes_ago">%1$d minutes ago</string>
+    <string name="seconds_ago">%1$d seconds ago</string>
+    <string name="never_opend">never opened</string>
 </resources>

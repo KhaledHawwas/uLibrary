@@ -33,10 +33,10 @@ class MainActivity: AppCompatActivity() {
         )
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val itemSubjectAdapter = ItemSubjectAdapter(
+        val subjectsAdapter = SubjectsAdapter(
             appDataRepo, remoteRepo, localStorage, appDataRepo.getSubjectsLive(), this
         )
-        binding.subjectsRv.adapter = itemSubjectAdapter
+        binding.subjectsRv.adapter = subjectsAdapter
         binding.subjectsRv.layoutManager = LinearLayoutManager(this)
         binding.notionBtn.setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, notionUri))

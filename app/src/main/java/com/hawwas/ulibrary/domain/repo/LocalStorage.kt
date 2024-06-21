@@ -7,7 +7,7 @@ interface LocalStorage {
     companion object {
         const val subjectFile = "subject.json"
         const val rootDir = "data/"
-        const val HeadersAbs = rootDir + "subjectsInfo.json"
+        const val headersAbs = rootDir + "subjectsInfo.json"
         const val subjectsHeaderFile = "subjectsInfo.json"
         const val subjectsDir = "subjects/"
 
@@ -31,6 +31,7 @@ interface LocalStorage {
     suspend fun getLastFetchedTime(): Long
     fun saveSubjectData(subject: Subject)
     fun updateDownloaded(item: Item)
+    fun getItemSize(item: Item): Long
 
 
 }
