@@ -30,7 +30,7 @@ interface LocalStorage {
     suspend fun saveLastFetchedTime(time: Long)
     suspend fun getLastFetchedTime(): Long
     fun saveSubjectData(subject: Subject)
-    fun updateDownloaded(item: Item)
+    fun updateFileStatus(item: Item)
     fun getItemSize(item: Item): Long
 
 

@@ -41,7 +41,7 @@ fun getLastWatched(lastTime: Long, context: Context): String {
     val years = months / 12
     return when {
         //TODO fix it
-        lastTime == 0L -> context.getString(R.string.never_opend)
+        lastTime == 0L -> context.getString(R.string.never_opened)
         years > 0 -> context.getString(R.string.years_ago, years)
         months > 4 -> context.getString(R.string.months_ago, months)
         days > 4 -> context.getString(R.string.days_ago, days)

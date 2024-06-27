@@ -36,7 +36,7 @@ class SubjectsAdapter(
         fun bind(subject: Subject) {
             binding.subjectNameTv.text = subject.name
             subject.items.forEach { item ->
-                localStorage.updateDownloaded(item)
+                localStorage.updateFileStatus(item)
             }
             val downloadedItems = subject.items.count { it.downloaded == DownloadStatus.DOWNLOADED }
             binding.itemsCountTv.text = "${subject.items.size}/${downloadedItems}"

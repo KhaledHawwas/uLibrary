@@ -15,6 +15,6 @@
     <string name="hours_ago">منذ %1$d ساعات</string>
     <string name="minutes_ago">منذ %1$d دقائق</string>
     <string name="seconds_ago">منذ %1$d ثواني</string>
-    <string name="never_opend">لم تفتح</string>
+    <string name="never_opened">لم تفتح</string>
 
 </resources>

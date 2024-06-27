@@ -23,7 +23,7 @@ class LocalStorageImpl(context: Context): LocalStorage {
         return itemFile.length()
     }
 
-    override fun updateDownloaded(item: Item) {
+    override fun updateFileStatus(item: Item) {
         val itemFile = File(appDir, LocalStorage.getItemPath(item))
         item.downloaded =
             if (itemFile.exists()) DownloadStatus.DOWNLOADED else DownloadStatus.NOT_STARTED
@@ -81,7 +81,7 @@ class LocalStorageImpl(context: Context): LocalStorage {
             val subject = toSubject(subjectJson)
             subjects.add(subject)
             for (item in subject.items) {
-                updateDownloaded(item)
+                updateFileStatus(item)
             }
 
         }
