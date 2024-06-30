@@ -18,33 +18,46 @@ class ItemsDisplayAdapter(
     private val remoteRepo: RemoteRepo,
     private val appDataRepo: AppDataRepo,
     private val lifecycleOwner: LifecycleOwner,
-    private val localStorage: LocalStorage
+    private val localStorage: LocalStorage,
+    private val selectedSubject: Subject,
+    private val selectedCategory: String
 ): RecyclerView.Adapter<ItemsDisplayAdapter.ViewHolder>() {
 
     private lateinit var parent: ViewGroup
-    var items: List<Item> = emptyList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    private val live = appDataRepo.getSubjectsLive()
+    var items: List<Item> = live.value
+        ?.find { subject -> subject == selectedSubject }
+        ?.items?.filter { item -> item.category == selectedCategory }
+        ?: emptyList()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         this.parent = parent
+        live.observe(lifecycleOwner) {
+            try {
+                items = it.find { subject -> subject == selectedSubject }
+                    ?.items?.filter { item -> item.category == selectedCategory }
+                    ?: emptyList()
+                notifyDataSetChanged()
+            } catch (e: IllegalStateException) {
+            }
+        }
         appDataRepo.downloadedItem().observe(lifecycleOwner) {
             try {
                 val itemName = it.substringAfterLast('/')
                 items.find { item -> item.name == itemName }?.downloaded = DownloadStatus.DOWNLOADED
                 notifyDataSetChanged()//TODO: optimize
             } catch (e: IllegalStateException) {
-                Log.e(TAG, "onCreateViewHolder: ", e)
+                Log.d(TAG, "onCreateViewHolder: ${e.message}")
+
             }
         }
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], position)
     }
 
     override fun getItemCount(): Int = items.size
@@ -52,7 +65,7 @@ class ItemsDisplayAdapter(
     inner class ViewHolder(private val binding: ItemLayoutBinding):
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Item) {
+        fun bind(item: Item, position: Int) {
             binding.apply {
                 itemNameTv.text = item.name.substringBefore('.')
                 itemAuthorTv.text = item.author
@@ -62,7 +75,7 @@ class ItemsDisplayAdapter(
                     ""
                 itemDownloadBtn.setOnClickListener {
                     if (!remoteRepo.downloadItem(item)) {
-                        openItem(item)
+                        openItem(item, position)
                     } else updateDownloadIcon(item)
                 }
 
@@ -72,8 +85,8 @@ class ItemsDisplayAdapter(
                     item.starred = !item.starred
                     updateStarred(item.starred)
                 }
-                itemPreviewLayout.setOnClickListener { openItem(item) }
-                itemLayout.setOnClickListener { openItem(item) }
+                itemPreviewLayout.setOnClickListener { openItem(item, position) }
+                itemLayout.setOnClickListener { openItem(item, position) }
                 lastWatchedTv.text = getLastWatched(item.lastWatched, this.root.context)
             }
         }
@@ -88,8 +101,8 @@ class ItemsDisplayAdapter(
             )
         }
 
-        private fun openItem(item: Item) {
-            if (item.downloaded != DownloadStatus.DOWNLOADED) {
+        private fun openItem(item: Item, position: Int) {
+            if (item.downloaded == DownloadStatus.NOT_STARTED) {
                 remoteRepo.downloadItem(item)
                 return
             }
@@ -106,6 +119,7 @@ class ItemsDisplayAdapter(
                 setDataAndType(uri, mime)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
+            notifyItemChanged(position)
             binding.root.context.startActivity(Intent.createChooser(intent, "Open ${item.name}"))
         }
 

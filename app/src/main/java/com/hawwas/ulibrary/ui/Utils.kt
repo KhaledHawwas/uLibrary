@@ -42,11 +42,11 @@ fun getLastWatched(lastTime: Long, context: Context): String {
     return when {
         //TODO fix it
         lastTime == 0L -> context.getString(R.string.never_opened)
-        years > 0 -> context.getString(R.string.years_ago, years)
-        months > 4 -> context.getString(R.string.months_ago, months)
-        days > 4 -> context.getString(R.string.days_ago, days)
-        hours > 4 -> context.getString(R.string.hours_ago, hours)
-        minutes > 4 -> context.getString(R.string.minutes_ago, minutes)
+        years > 1 -> context.getString(R.string.years_ago, years)
+        months > 1 -> context.getString(R.string.months_ago, months)
+        days > 1 -> context.getString(R.string.days_ago, days)
+        hours > 1 -> context.getString(R.string.hours_ago, hours)
+        minutes > 1 -> context.getString(R.string.minutes_ago, minutes)
         else -> context.getString(R.string.seconds_ago, seconds)
     }
 }
@@ -56,9 +56,13 @@ val kilo= size/1024f
 val mega= kilo/1024f
 val giga= mega/1024f
     return when{
-        giga>0 -> String.format("%.2f GB",giga)
-        mega>0 -> String.format("%.2f MB",mega)
+        giga>1 -> String.format("%.2f GB",giga)
+        mega>1 -> String.format("%.2f MB",mega)
         else -> String.format("%.2f KB",kilo)
     }
 
+}
+fun validFileName(newFileName: String): Boolean {
+    val invalidChars = setOf('\\', '/', ':', '*', '?', '"','<', '>', '|')
+    return newFileName.isNotEmpty() && newFileName.none { it in invalidChars }
 }

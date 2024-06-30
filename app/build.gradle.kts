@@ -66,6 +66,11 @@ dependencies {
     //data store
     implementation(libs.androidx.datastore.preferences)
 
+    // required if you want to use Mockito for unit tests
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.mockito.core)
+    // required if you want to use Mockito for Android tests
+    androidTestImplementation(libs.mockito.mockito.android)
 
     testImplementation(libs.junit)
 

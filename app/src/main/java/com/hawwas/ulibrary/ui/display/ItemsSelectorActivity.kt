@@ -1,6 +1,10 @@
 package com.hawwas.ulibrary.ui.display
 
+import android.content.*
+import android.net.*
 import android.os.*
+import android.text.*
+import android.util.*
 import android.widget.*
 import androidx.activity.*
 import androidx.appcompat.app.*
@@ -10,19 +14,22 @@ import com.hawwas.ulibrary.R
 import com.hawwas.ulibrary.databinding.*
 import com.hawwas.ulibrary.domain.repo.*
 import com.hawwas.ulibrary.model.*
+import com.hawwas.ulibrary.ui.*
 import dagger.hilt.android.*
+import okio.*
 import javax.inject.*
 
 @AndroidEntryPoint
 class ItemsSelectorActivity: AppCompatActivity() {
+
     private lateinit var binding: ActivityItemsSelectorBinding
     @Inject lateinit var remoteRepo: RemoteRepo
     @Inject lateinit var appDataRepo: AppDataRepo
     @Inject lateinit var localStorage: LocalStorage
 
-   private lateinit var selectedSubject: Subject
-    private     lateinit var selectedCategory: String
-    private     lateinit var selectedItems: List<Item>
+    private lateinit var selectedSubject: Subject
+    private lateinit var selectedCategory: String
+    private lateinit var itemsDisplayAdapter: ItemsDisplayAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,30 +43,78 @@ class ItemsSelectorActivity: AppCompatActivity() {
         }
         val extra = intent.getStringExtra("selectedItems")
         try {
-
             readExtra(extra)
         } catch (e: IllegalArgumentException) {
             Toast.makeText(this, "Error:${e.message}", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
-        val itemsDisplayAdapter = ItemsDisplayAdapter(remoteRepo, appDataRepo, this,localStorage)
-        itemsDisplayAdapter.items = selectedItems
+        itemsDisplayAdapter = ItemsDisplayAdapter(
+            remoteRepo, appDataRepo, this, localStorage, selectedSubject, selectedCategory
+        )
+
+        binding.addItemBtn.setOnClickListener {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = "*/*"
+                addCategory(Intent.CATEGORY_OPENABLE)
+            }
+            startActivityForResult(
+                Intent.createChooser(intent, getString(R.string.select_a_file)),
+                REQUEST_CODE_PICK_FILE
+            )
+
+        }
         binding.subjectTitleTv.text = selectedSubject.name
         binding.categoryTitleTv.text = selectedCategory
         binding.itemsRv.adapter = itemsDisplayAdapter
         binding.itemsRv.layoutManager = LinearLayoutManager(this)
     }
+    // Handle the result in onActivityResult
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != REQUEST_CODE_PICK_FILE || resultCode != RESULT_OK) return
+        if (data == null || data.data == null) return
+        val uri = data?.data ?: return
+        var fileInfo: FileInfo?
+        try {
+
+            fileInfo = localStorage.getFileInfo(uri)
+        } catch (e: IOException) {
+            Log.d(TAG, "error: (${e.message}): ${uri.path}")
+            return
+        }
+        val existedVersion = selectedSubject.items.firstOrNull { it.version == fileInfo.identifier }
+        if (existedVersion == null) {
+            showOverrideFileNameDialog(uri, fileInfo)
+            return
+        }
+        if (existedVersion.downloaded == DownloadStatus.DOWNLOADED
+            || existedVersion.downloaded == DownloadStatus.LOCAL) {
+            Toast.makeText(this, getString(R.string.file_already_exists), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+
+        val item = Item(
+            existedVersion.name,
+            getString(R.string.you),
+            selectedCategory,
+            fileInfo.identifier,
+            "",
+            selectedSubject.name
+        )
+        item.downloaded = DownloadStatus.LOCAL
+        localStorage.copyItem(uri, item){
+        appDataRepo.updateSubject(selectedSubject)
+        //    itemsDisplayAdapter.notifyDataSetChanged()
+         itemsDisplayAdapter.notifyItemChanged(selectedSubject.items.indexOf(existedVersion))
+    }}
 
 
     private fun readExtra(extras: String?) {
         extras?.split("/")?.let { extra ->
             val selectedSubjectName = extra[0]
             selectedCategory = extra[1]
-            selectedItems = appDataRepo.getSubjectsLive().value
-                ?.find { subject -> subject.name == selectedSubjectName }
-                ?.items?.filter { item -> item.category == selectedCategory }
-                ?: emptyList()
             selectedSubject = appDataRepo.getSubjectsLive().value!!.firstOrNull {
                 it.name == selectedSubjectName
             } ?: throw IllegalArgumentException("Subject not found")
@@ -72,6 +127,50 @@ class ItemsSelectorActivity: AppCompatActivity() {
     }
 
     companion object {
+        private const val REQUEST_CODE_PICK_FILE = 1
         private const val TAG = "KH_ItemsSelectorActivity"
     }
+
+
+    private fun showOverrideFileNameDialog(uri: Uri, fileInfo: FileInfo) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.override_file_name))
+
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        input.hint = getString(R.string.enter_new_file_name_optional)
+        input.setText(fileInfo.name)
+        builder.setView(input)
+
+        builder.setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+            val newFileName = input.text.toString().trim()
+            if (validFileName(newFileName)) {
+                val item = Item(
+                    newFileName,
+                    getString(R.string.you),
+                    selectedCategory,
+                    fileInfo.identifier,
+                    "",
+                    selectedSubject.name
+                )
+                item.downloaded = DownloadStatus.LOCAL
+                localStorage.copyItem(uri, item){
+                selectedSubject.items.add(item)
+                appDataRepo.updateSubject(selectedSubject)
+               // itemsDisplayAdapter.notifyDataSetChanged()
+                itemsDisplayAdapter.notifyItemInserted(selectedSubject.items.indexOf(item))
+                }
+            } else {
+                Toast.makeText(this, getString(R.string.invalid_file_name), Toast.LENGTH_SHORT).show()
+                //TODO
+
+            }
+            dialog.dismiss()
+        }
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
+
+        builder.show()
+    }
+
+
 }

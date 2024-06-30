@@ -1,6 +1,9 @@
 package com.hawwas.ulibrary.data.repo
 
 import android.content.*
+import android.net.*
+import android.provider.*
+import android.util.*
 import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.data.*
 import com.hawwas.ulibrary.domain.repo.*
@@ -8,14 +11,57 @@ import com.hawwas.ulibrary.domain.repo.LocalStorage.Companion.rootDir
 import com.hawwas.ulibrary.domain.repo.LocalStorage.Companion.subjectsDir
 import com.hawwas.ulibrary.model.*
 import java.io.*
+import java.security.*
 
-class LocalStorageImpl(context: Context): LocalStorage {
+class LocalStorageImpl(private val context: Context): LocalStorage {
     private val appDir = context.externalMediaDirs.first()!!
     private val cashDir = context.cacheDir!!
     private val dataStoreManager = DataStoreManager(context)
 
+    fun getItemFile(item: Item) = File(appDir, LocalStorage.getItemPath(item))
+    fun getSubjectFile(subject: Subject) = File(appDir, LocalStorage.getSubjectFile(subject))
+    override fun getAppDir(): String = appDir.absolutePath
+    override fun getFileInfo(uri: Uri): FileInfo {
+        var name = ""
+        var size: Long = 0
+
+        context.contentResolver.query(
+            uri, null, null, null, null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+                if (nameIndex != -1) {
+                    name = cursor.getString(nameIndex)
+                }
+                if (sizeIndex != -1) {
+                    size = cursor.getLong(sizeIndex)
+                }
+            }
+        }
+        val identifier = if (size > sizeThreshold) {
+            "S$size"
+        } else {
+            "H" + computeFileHash(context.contentResolver, uri)
+        }
+
+        return FileInfo(name, size, identifier)
+    }
+
+    fun computeFileHash(contentResolver: ContentResolver, uri: Uri): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        contentResolver.openInputStream(uri)?.use { inputStream ->
+            val buffer = ByteArray(1024)
+            var bytesRead: Int
+            while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                digest.update(buffer, 0, bytesRead)
+            }
+        }
+        return digest.digest().joinToString("") { "%02x".format(it) }
+    }
+
     override fun getItemSize(item: Item): Long {
-        val itemFile = File(appDir, LocalStorage.getItemPath(item))
+        val itemFile = getItemFile(item)
         if (!itemFile.exists()) {
             MyLog.d(MyLog.MyTag.FILE_SHOULD_EXISTS)
             return 0
@@ -23,20 +69,39 @@ class LocalStorageImpl(context: Context): LocalStorage {
         return itemFile.length()
     }
 
+
     override fun updateFileStatus(item: Item) {
-        val itemFile = File(appDir, LocalStorage.getItemPath(item))
+        val itemFile = getItemFile(item)
         item.downloaded =
             if (itemFile.exists()) DownloadStatus.DOWNLOADED else DownloadStatus.NOT_STARTED
     }
 
     override fun saveSubjectData(subject: Subject) {
-        val file = File(appDir, LocalStorage.getSubjectFile(subject))
+        val file = getSubjectFile(subject)
         try {
             file.writeText(subjectToJson(subject))
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
+
+    override fun copyItem(filePath: Uri, item: Item) {
+        copyItem(filePath, item) {}
+    }
+
+    override fun copyItem(filePath: Uri, item: Item, onFinish: () -> Unit) {
+        context.contentResolver.openInputStream(filePath)?.use { inputStream ->
+            val itemFile = getItemFile(item)
+            Log.d(TAG, "copyItem: ${itemFile.path}")
+            itemFile.parentFile?.mkdirs()
+            itemFile.outputStream().use { outputStream ->
+                inputStream.copyTo(outputStream)
+                onFinish()
+            }
+
+        }
+    }
+
 
     override fun saveFile(folderName: String, fileName: String, data: ByteArray) {
         val folder = File(appDir, folderName)
@@ -106,5 +171,6 @@ class LocalStorageImpl(context: Context): LocalStorage {
 
     companion object {
         private const val TAG = "KH_LocalStorageImpl"
+        const val sizeThreshold = 1024 * 1024 * 10 //10MB
     }
 }

@@ -18,17 +18,20 @@ data class Item(
             else -> "$category/"
         }
     }
+
     /**
      * @return the path from subjects directory including the subject name
      */
     fun getPathFromSubjects(): String {
         return subjectName + "/" + getCategoryDir() + name
     }
+
 }
 
 enum class DownloadStatus {
     NOT_STARTED,
     DOWNLOADING,
     DOWNLOADED,
+    LOCAL,
     FAILED
 }

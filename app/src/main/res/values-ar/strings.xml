@@ -16,5 +16,12 @@
     <string name="minutes_ago">منذ %1$d دقائق</string>
     <string name="seconds_ago">منذ %1$d ثواني</string>
     <string name="never_opened">لم تفتح</string>
-
+    <string name="select_a_file">أختر ملف</string>
+    <string name="you">أنت</string>
+    <string name="override_file_name">أعد تسمية الملف</string>
+    <string name="enter_new_file_name_optional">أدخل اسم جديد (إاختياري)</string>
+    <string name="cancel">إلغاء</string>
+    <string name="ok">حسناً</string>
+    <string name="file_already_exists">الملف موجود مسبقاَ</string>
+    <string name="invalid_file_name">       إسم غير مسموح به</string>
 </resources>

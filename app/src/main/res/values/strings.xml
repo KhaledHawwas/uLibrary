@@ -15,4 +15,12 @@
     <string name="minutes_ago">%1$d minutes ago</string>
     <string name="seconds_ago">%1$d seconds ago</string>
     <string name="never_opened">never opened</string>
+    <string name="select_a_file">Select a file</string>
+    <string name="you">You</string>
+    <string name="override_file_name">Override File Name</string>
+    <string name="enter_new_file_name_optional">Enter new file name (optional)</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="file_already_exists">file already exists</string>
+    <string name="invalid_file_name">invalid file name</string>
 </resources>

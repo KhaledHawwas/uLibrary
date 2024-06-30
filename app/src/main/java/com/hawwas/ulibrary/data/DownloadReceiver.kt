@@ -2,6 +2,7 @@ package com.hawwas.ulibrary.data
 
 import android.app.*
 import android.content.*
+import android.util.*
 import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.domain.repo.*
 import dagger.hilt.android.*
@@ -25,6 +26,10 @@ class DownloadReceiver: BroadcastReceiver() {
         if (cursor.moveToFirst()) {
             val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
             val downloadedUriString = cursor.getString(columnIndex)
+            if (downloadedUriString == null) {
+                Log.d(TAG, "onReceive: ${intent?.action}")
+                return
+            }
             MyLog.d(MyLog.MyTag.DOWNLOAD_COMPLETE, TAG, "received: $downloadedUriString")
             appDataRepo.downloadedItem()
                 .postValue(downloadedUriString.substringAfterLast("subjects/"))
