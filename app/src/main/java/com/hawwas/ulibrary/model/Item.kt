@@ -10,7 +10,8 @@ data class Item(
 ) {
     var starred: Boolean = false
     var lastWatched: Long = 0
-    var downloaded: DownloadStatus = DownloadStatus.NOT_STARTED
+    var downloadStatus: DownloadStatus =
+        if (remotePath.isEmpty()) DownloadStatus.LOCAL else DownloadStatus.NOT_STARTED
 
     fun getCategoryDir(): String {
         return when (category) {
@@ -29,9 +30,10 @@ data class Item(
 }
 
 enum class DownloadStatus {
-    NOT_STARTED,
-    DOWNLOADING,
-    DOWNLOADED,
-    LOCAL,
-    FAILED
+    NOT_STARTED, DOWNLOADING, DOWNLOADED, LOCAL, FAILED, ;
+
+    fun downloadable(): Boolean = this == NOT_STARTED || this == FAILED
+
+    fun exists(): Boolean = this == DOWNLOADED || this == LOCAL
+
 }

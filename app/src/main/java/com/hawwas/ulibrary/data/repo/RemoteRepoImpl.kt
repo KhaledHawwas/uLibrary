@@ -47,18 +47,18 @@ class RemoteRepoImpl @Inject constructor(private var downloader: AndroidDownload
     }
 
     override fun downloadItem(item: Item): Boolean {
-        if (item.downloaded != DownloadStatus.NOT_STARTED)
+        if (!item.downloadStatus.downloadable())
             return false
-        item.downloaded = DownloadStatus.DOWNLOADING
+        item.downloadStatus = DownloadStatus.DOWNLOADING
         downloadFile(RemoteRepo.getItemPath(item), LocalStorage.getItemPath(item))
         return true
     }
 
     override fun downloadSubject(subject: Subject) {
         for (item in subject.items) {
-            if (item.downloaded != DownloadStatus.NOT_STARTED)
+            if (!item.downloadStatus.downloadable())
                 continue
-            item.downloaded = DownloadStatus.DOWNLOADING
+            item.downloadStatus = DownloadStatus.DOWNLOADING
             downloadFile(
                 RemoteRepo.baseGithubUrl + RemoteRepo.repoUrl + item.remotePath,
                 LocalStorage.getItemPath(item)

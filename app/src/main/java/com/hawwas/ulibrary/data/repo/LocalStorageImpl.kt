@@ -39,7 +39,7 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
                 }
             }
         }
-        val identifier = if (size > sizeThreshold) {
+        val identifier = if (size < sizeThreshold) {
             "S$size"
         } else {
             "H" + computeFileHash(context.contentResolver, uri)
@@ -71,8 +71,13 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
 
 
     override fun updateFileStatus(item: Item) {
+        if (item.remotePath.isEmpty()) {
+            item.downloadStatus = DownloadStatus.LOCAL
+            return
+        }
+
         val itemFile = getItemFile(item)
-        item.downloaded =
+        item.downloadStatus =
             if (itemFile.exists()) DownloadStatus.DOWNLOADED else DownloadStatus.NOT_STARTED
     }
 
@@ -89,6 +94,7 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
         copyItem(filePath, item) {}
     }
 
+
     override fun copyItem(filePath: Uri, item: Item, onFinish: () -> Unit) {
         context.contentResolver.openInputStream(filePath)?.use { inputStream ->
             val itemFile = getItemFile(item)
@@ -96,10 +102,10 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
             itemFile.parentFile?.mkdirs()
             itemFile.outputStream().use { outputStream ->
                 inputStream.copyTo(outputStream)
-                onFinish()
             }
-
         }
+        onFinish()
+
     }
 
 

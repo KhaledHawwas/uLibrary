@@ -17,8 +17,7 @@ class SubjectsAdapter(
     val localStorage: LocalStorage,
     var subjects: LiveData<List<Subject>>,
     private val lifecycleOwner: LifecycleOwner
-):
-    RecyclerView.Adapter<SubjectsAdapter.ViewHolder>() {
+): RecyclerView.Adapter<SubjectsAdapter.ViewHolder>() {
     private lateinit var parent: ViewGroup
 
     init {
@@ -38,8 +37,8 @@ class SubjectsAdapter(
             subject.items.forEach { item ->
                 localStorage.updateFileStatus(item)
             }
-            val downloadedItems = subject.items.count { it.downloaded == DownloadStatus.DOWNLOADED }
-            binding.itemsCountTv.text = "${subject.items.size}/${downloadedItems}"
+            val downloadedItems = subject.items.count { it.downloadStatus.exists() }
+            binding.itemsCountTv.text = "${downloadedItems}/${subject.items.size}"
             binding.downloadSubjectBtn.setOnClickListener {
                 remoteRepo.downloadSubject(subject)
             }
@@ -64,9 +63,9 @@ class SubjectsAdapter(
             }
 
 
-
         }
-       private fun openCategory(category: String) {
+
+        private fun openCategory(category: String) {
             Intent(parent.context, ItemsSelectorActivity::class.java).also {
                 it.putExtra("selectedItems", category)
                 parent.context.startActivity(it)

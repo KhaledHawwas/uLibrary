@@ -1,7 +1,6 @@
 package com.hawwas.ulibrary.ui.display
 
 import android.content.*
-import android.os.*
 import android.util.*
 import android.view.*
 import androidx.core.content.*
@@ -25,34 +24,37 @@ class ItemsDisplayAdapter(
 
     private lateinit var parent: ViewGroup
     private val live = appDataRepo.getSubjectsLive()
-    var items: List<Item> = live.value
-        ?.find { subject -> subject == selectedSubject }
-        ?.items?.filter { item -> item.category == selectedCategory }
-        ?: emptyList()
+    private var items: List<Item> =
+        live.value?.find { subject -> subject == selectedSubject }?.items?.filter { item -> item.category == selectedCategory }
+            ?: emptyList()
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        this.parent = parent
+    init {
         live.observe(lifecycleOwner) {
             try {
-                items = it.find { subject -> subject == selectedSubject }
-                    ?.items?.filter { item -> item.category == selectedCategory }
-                    ?: emptyList()
+                items =
+                    it.find { subject -> subject == selectedSubject }?.items?.filter { item -> item.category == selectedCategory }
+                        ?: emptyList()
                 notifyDataSetChanged()
             } catch (e: IllegalStateException) {
+                Log.d(TAG, "race something ")
             }
         }
         appDataRepo.downloadedItem().observe(lifecycleOwner) {
             try {
                 val itemName = it.substringAfterLast('/')
-                items.find { item -> item.name == itemName }?.downloaded = DownloadStatus.DOWNLOADED
+                items.find { item -> item.name == itemName }?.downloadStatus =
+                    DownloadStatus.DOWNLOADED
                 notifyDataSetChanged()//TODO: optimize
             } catch (e: IllegalStateException) {
-                Log.d(TAG, "onCreateViewHolder: ${e.message}")
-
+                Log.d(TAG, "race something ")
             }
         }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        this.parent = parent
+
         return ViewHolder(binding)
     }
 
@@ -69,10 +71,9 @@ class ItemsDisplayAdapter(
             binding.apply {
                 itemNameTv.text = item.name.substringBefore('.')
                 itemAuthorTv.text = item.author
-                itemSizeTv.text = if (item.downloaded == DownloadStatus.DOWNLOADED) {
+                itemSizeTv.text = if (item.downloadStatus.exists()) {
                     getSize(localStorage.getItemSize(item))
-                } else
-                    ""
+                } else ""
                 itemDownloadBtn.setOnClickListener {
                     if (!remoteRepo.downloadItem(item)) {
                         openItem(item, position)
@@ -93,7 +94,8 @@ class ItemsDisplayAdapter(
 
         private fun updateDownloadIcon(item: Item) {
             binding.itemDownloadBtn.setImageResource(
-                when (item.downloaded) {
+                when (item.downloadStatus) {
+                    DownloadStatus.LOCAL -> R.drawable.local_24px
                     DownloadStatus.NOT_STARTED -> R.drawable.download_24px
                     DownloadStatus.DOWNLOADING -> R.drawable.downloading_24px
                     else -> R.drawable.download_done_24px
@@ -102,18 +104,16 @@ class ItemsDisplayAdapter(
         }
 
         private fun openItem(item: Item, position: Int) {
-            if (item.downloaded == DownloadStatus.NOT_STARTED) {
+            if (item.downloadStatus.downloadable()) {
                 remoteRepo.downloadItem(item)
                 return
             }
             item.lastWatched = System.currentTimeMillis()
             val uri = FileProvider.getUriForFile(
                 parent.context, "${BuildConfig.APPLICATION_ID}.fileprovider", File(
-                    Environment.getExternalStorageDirectory(),
-                    "Android/media/${BuildConfig.APPLICATION_ID}/${LocalStorage.getItemPath(item)}"
+                    localStorage.getAppDir(), LocalStorage.getItemPath(item)
                 )
             )
-
             val mime = getMIMEType(item.name.substringAfterLast('.'))
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 setDataAndType(uri, mime)

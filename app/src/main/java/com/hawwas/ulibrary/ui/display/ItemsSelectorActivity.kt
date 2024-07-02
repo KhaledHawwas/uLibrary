@@ -88,8 +88,7 @@ class ItemsSelectorActivity: AppCompatActivity() {
             showOverrideFileNameDialog(uri, fileInfo)
             return
         }
-        if (existedVersion.downloaded == DownloadStatus.DOWNLOADED
-            || existedVersion.downloaded == DownloadStatus.LOCAL) {
+        if (existedVersion.downloadStatus == DownloadStatus.DOWNLOADED || existedVersion.downloadStatus == DownloadStatus.LOCAL) {
             Toast.makeText(this, getString(R.string.file_already_exists), Toast.LENGTH_SHORT).show()
             return
         }
@@ -103,12 +102,12 @@ class ItemsSelectorActivity: AppCompatActivity() {
             "",
             selectedSubject.name
         )
-        item.downloaded = DownloadStatus.LOCAL
-        localStorage.copyItem(uri, item){
-        appDataRepo.updateSubject(selectedSubject)
-        //    itemsDisplayAdapter.notifyDataSetChanged()
-         itemsDisplayAdapter.notifyItemChanged(selectedSubject.items.indexOf(existedVersion))
-    }}
+        localStorage.copyItem(uri, item) {
+            appDataRepo.updateSubject(selectedSubject)
+            //    itemsDisplayAdapter.notifyDataSetChanged()
+            itemsDisplayAdapter.notifyItemChanged(selectedSubject.items.indexOf(existedVersion))
+        }
+    }
 
 
     private fun readExtra(extras: String?) {
@@ -141,31 +140,29 @@ class ItemsSelectorActivity: AppCompatActivity() {
         input.hint = getString(R.string.enter_new_file_name_optional)
         input.setText(fileInfo.name)
         builder.setView(input)
-
         builder.setPositiveButton(getString(R.string.ok)) { dialog, _ ->
             val newFileName = input.text.toString().trim()
-            if (validFileName(newFileName)) {
-                val item = Item(
-                    newFileName,
-                    getString(R.string.you),
-                    selectedCategory,
-                    fileInfo.identifier,
-                    "",
-                    selectedSubject.name
-                )
-                item.downloaded = DownloadStatus.LOCAL
-                localStorage.copyItem(uri, item){
+            if (!validFileName(newFileName)) {
+                Toast.makeText(this, getString(R.string.invalid_file_name), Toast.LENGTH_SHORT)
+                    .show()
+                dialog.dismiss()
+
+                return@setPositiveButton
+            }
+            val item = Item(
+                newFileName,
+                getString(R.string.you),
+                selectedCategory,
+                fileInfo.identifier,
+                "",//it's local
+                selectedSubject.name
+            )
+            localStorage.copyItem(uri, item) {
                 selectedSubject.items.add(item)
                 appDataRepo.updateSubject(selectedSubject)
-               // itemsDisplayAdapter.notifyDataSetChanged()
                 itemsDisplayAdapter.notifyItemInserted(selectedSubject.items.indexOf(item))
-                }
-            } else {
-                Toast.makeText(this, getString(R.string.invalid_file_name), Toast.LENGTH_SHORT).show()
-                //TODO
-
             }
-            dialog.dismiss()
+
         }
         builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
 

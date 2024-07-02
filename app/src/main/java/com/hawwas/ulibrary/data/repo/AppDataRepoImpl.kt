@@ -40,11 +40,10 @@ class AppDataRepoImpl: AppDataRepo {
         val index = ls.indexOf(subject)
         if (index != -1) {
             ls[index] = subject
-            selectedSubjectsLive.postValue(ls)
         } else {
             ls.add(subject)
-            selectedSubjectsLive.value = ls
         }
+            selectedSubjectsLive.postValue(ls)
     }
 
     companion object {
