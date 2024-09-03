@@ -25,14 +25,16 @@ class ItemsDisplayAdapter(
     private lateinit var parent: ViewGroup
     private val live = appDataRepo.getSubjectsLive()
     private var items: List<Item> =
-        live.value?.find { subject -> subject == selectedSubject }?.items?.filter { item -> item.category == selectedCategory }
+        live.value?.find { subject -> subject == selectedSubject }?.items
+            ?.filter { item -> item.category == selectedCategory }
             ?: emptyList()
 
     init {
         live.observe(lifecycleOwner) {
             try {
                 items =
-                    it.find { subject -> subject == selectedSubject }?.items?.filter { item -> item.category == selectedCategory }
+                    it.find { subject -> subject == selectedSubject }?.items
+                        ?.filter { item -> item.category == selectedCategory }
                         ?: emptyList()
                 notifyDataSetChanged()
             } catch (e: IllegalStateException) {
@@ -42,9 +44,10 @@ class ItemsDisplayAdapter(
         appDataRepo.downloadedItem().observe(lifecycleOwner) {
             try {
                 val itemName = it.substringAfterLast('/')
-                items.find { item -> item.name == itemName }?.downloadStatus =
-                    DownloadStatus.DOWNLOADED
-                notifyDataSetChanged()//TODO: optimize
+                    val foundItem=items.find { item -> item.name == itemName };
+                if (foundItem == null) return@observe
+                foundItem.downloadStatus = DownloadStatus.DOWNLOADED
+                notifyItemInserted(items.indexOf(foundItem))
             } catch (e: IllegalStateException) {
                 Log.d(TAG, "race something ")
             }

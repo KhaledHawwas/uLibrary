@@ -6,14 +6,15 @@ import androidx.datastore.preferences.*
 import androidx.datastore.preferences.core.*
 import kotlinx.coroutines.flow.*
 
-private val Context.userPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(
-    name = "user"
-)
 
 class DataStoreManager(context: Context) {
     private val dataStore = context.userPreferencesDataStore
 
     companion object {
+        private val Context.userPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(
+            name = "user"
+        )
+
         val lastFetched = longPreferencesKey("last_fetched")
     }
 
@@ -26,6 +27,16 @@ class DataStoreManager(context: Context) {
     suspend fun getLastFetchedTime(): Long {
         return dataStore.data.map { preferences ->
             preferences[lastFetched] ?: 0
+        }.first()
+    }
+   suspend fun <T>  Preferences.Key<T>.save(value: T) {
+        dataStore.edit { preferences ->
+            preferences[this] = value
+        }
+    }
+    suspend fun <T> Preferences.Key<T>.load(default:T): T {
+        return dataStore.data.map { preferences ->
+            preferences[this] ?: default
         }.first()
     }
 }

@@ -6,7 +6,7 @@ import android.net.*
 import java.io.*
 import javax.inject.*
 
-class AndroidDownloader @Inject constructor(private val context: Context) {
+class AndroidDownloader @Inject constructor(val context: Context) {
     private val downloadManager =
         context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
