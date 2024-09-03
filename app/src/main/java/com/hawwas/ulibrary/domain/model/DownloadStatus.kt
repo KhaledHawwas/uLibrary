@@ -1,4 +1,4 @@
-package com.hawwas.ulibrary.model
+package com.hawwas.ulibrary.domain.model
 
 enum class DownloadStatus(val code:Int) {
     NOT_STARTED(0),
@@ -11,7 +11,7 @@ enum class DownloadStatus(val code:Int) {
 
     fun exists(): Boolean = this == DOWNLOADED || this == LOCAL
 companion object{
-    fun getByCode(code: Int):DownloadStatus{
+    fun getByCode(code: Int): DownloadStatus {
         return entries.first { it.ordinal == code }
     }
 }

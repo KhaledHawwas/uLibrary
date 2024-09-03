@@ -1,4 +1,4 @@
-package com.hawwas.ulibrary.model
+package com.hawwas.ulibrary.domain.model
 
 /**
  * This class is to hold the information of the subject so user can choose from it

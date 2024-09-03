@@ -1,6 +1,7 @@
 package com.hawwas.ulibrary.data
 
-import com.hawwas.ulibrary.model.*
+import com.hawwas.ulibrary.domain.model.*
+
 import org.json.*
 
 private const val TAG = "KH_JsonUtil"

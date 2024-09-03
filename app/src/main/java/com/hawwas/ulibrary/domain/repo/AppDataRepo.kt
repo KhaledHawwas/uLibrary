@@ -1,7 +1,7 @@
 package com.hawwas.ulibrary.domain.repo
 
 import androidx.lifecycle.*
-import com.hawwas.ulibrary.model.*
+import com.hawwas.ulibrary.domain.model.*
 
 interface AppDataRepo {
     fun getHeaders(): MutableLiveData<List<SubjectHeader>>

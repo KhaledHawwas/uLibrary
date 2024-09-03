@@ -1,8 +1,8 @@
 package com.hawwas.ulibrary.data.repo
 
 import com.hawwas.ulibrary.data.remote.*
+import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.model.*
 import okhttp3.*
 import retrofit2.*
 import retrofit2.Call

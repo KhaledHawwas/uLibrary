@@ -2,9 +2,9 @@ package com.hawwas.ulibrary.data.repo
 
 import com.hawwas.ulibrary.data.db.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.model.*
 import com.hawwas.ulibrary.data.db.*
 import com.hawwas.ulibrary.data.db.entity.*
+import com.hawwas.ulibrary.domain.model.*
 import javax.inject.*
 
 class DatabaseRepoImpl @Inject constructor(

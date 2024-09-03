@@ -1,7 +1,7 @@
 package com.hawwas.ulibrary.domain.repo
 
 import android.net.*
-import com.hawwas.ulibrary.model.*
+import com.hawwas.ulibrary.domain.model.*
 
 interface LocalStorage {
 
@@ -33,7 +33,7 @@ interface LocalStorage {
     fun getItemSize(item: Item): Long
     fun getFileInfo( uri: Uri): FileInfo
     fun copyItem(filePath: Uri, item: Item)
-    fun copyItem(filePath: Uri, item: Item,onFinish: ()->Unit)
+    fun copyItem(filePath: Uri, item: Item, onFinish: ()->Unit)
     fun getAppDir():String
 
 

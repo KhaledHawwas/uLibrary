@@ -1,4 +1,4 @@
-package com.hawwas.ulibrary.model
+package com.hawwas.ulibrary.domain.model
 
 data class Subject(
     val version: String,

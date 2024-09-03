@@ -1,8 +1,8 @@
 package com.hawwas.ulibrary.data.repo
 
 import androidx.lifecycle.*
+import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.model.*
 
 class AppDataRepoImpl: AppDataRepo {
     private val headersLive = MutableLiveData<List<SubjectHeader>>()

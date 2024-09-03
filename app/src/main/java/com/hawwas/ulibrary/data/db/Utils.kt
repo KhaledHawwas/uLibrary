@@ -1,7 +1,7 @@
 package com.hawwas.ulibrary.data.db
 
 import com.hawwas.ulibrary.data.db.entity.*
-import com.hawwas.ulibrary.model.*
+import com.hawwas.ulibrary.domain.model.*
 
 fun Subject.toSubjectEntity(): SubjectEntity {
     return SubjectEntity(
@@ -43,7 +43,7 @@ fun ItemEntity.toItem(): Item {
     }
 
 }
-fun SubjectWithItems.toSubject():Subject{
+fun SubjectWithItems.toSubject(): Subject {
 
     return Subject(
         name = subjectEntity.name,

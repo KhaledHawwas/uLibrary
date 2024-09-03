@@ -12,8 +12,8 @@ import androidx.core.view.*
 import androidx.recyclerview.widget.*
 import com.hawwas.ulibrary.R
 import com.hawwas.ulibrary.databinding.*
+import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.model.*
 import com.hawwas.ulibrary.ui.*
 import dagger.hilt.android.*
 import okio.*
@@ -75,7 +75,7 @@ class ItemsSelectorActivity: AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode != REQUEST_CODE_PICK_FILE || resultCode != RESULT_OK) return
         if (data == null || data.data == null) return
-        val uri = data?.data ?: return
+        val uri = data.data ?: return
         var fileInfo: FileInfo?
         try {
 

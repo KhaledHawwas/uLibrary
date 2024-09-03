@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.*
 import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.R
 import com.hawwas.ulibrary.databinding.*
+import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.model.*
 import dagger.hilt.android.*
 import kotlinx.coroutines.*
 import retrofit2.*

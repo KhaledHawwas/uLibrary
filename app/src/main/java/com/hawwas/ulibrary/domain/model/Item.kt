@@ -1,4 +1,4 @@
-package com.hawwas.ulibrary.model
+package com.hawwas.ulibrary.domain.model
 
 data class Item(
     val name: String,

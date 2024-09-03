@@ -5,10 +5,10 @@ import android.net.*
 import android.provider.*
 import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.data.*
+import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
 import com.hawwas.ulibrary.domain.repo.LocalStorage.Companion.rootDir
 import com.hawwas.ulibrary.domain.repo.LocalStorage.Companion.subjectsDir
-import com.hawwas.ulibrary.model.*
 import java.io.*
 import java.security.*
 

@@ -4,8 +4,8 @@ import androidx.lifecycle.*
 import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.data.*
 import com.hawwas.ulibrary.data.remote.*
+import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.model.*
 import dagger.hilt.android.lifecycle.*
 import javax.inject.*
 

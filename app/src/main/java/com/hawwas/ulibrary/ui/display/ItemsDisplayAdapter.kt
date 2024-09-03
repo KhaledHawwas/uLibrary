@@ -8,8 +8,8 @@ import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.databinding.*
+import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.model.*
 import com.hawwas.ulibrary.ui.*
 import java.io.*
 
@@ -44,7 +44,7 @@ class ItemsDisplayAdapter(
         appDataRepo.downloadedItem().observe(lifecycleOwner) {
             try {
                 val itemName = it.substringAfterLast('/')
-                    val foundItem=items.find { item -> item.name == itemName };
+                    val foundItem=items.find { item -> item.name == itemName }
                 if (foundItem == null) return@observe
                 foundItem.downloadStatus = DownloadStatus.DOWNLOADED
                 notifyItemInserted(items.indexOf(foundItem))

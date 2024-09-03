@@ -1,4 +1,4 @@
-package com.hawwas.ulibrary.ui
+package com.hawwas.ulibrary.ui.main
 
 import android.content.*
 import android.util.*
@@ -7,8 +7,8 @@ import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.databinding.*
+import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.model.*
 import com.hawwas.ulibrary.ui.display.*
 
 class SubjectsAdapter(

@@ -1,7 +1,7 @@
 package com.hawwas.ulibrary.domain.repo
 
 import com.hawwas.ulibrary.data.remote.*
-import com.hawwas.ulibrary.model.*
+import com.hawwas.ulibrary.domain.model.*
 
 interface RemoteRepo {
     companion object {

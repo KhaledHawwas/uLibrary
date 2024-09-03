@@ -4,11 +4,11 @@ import android.view.*
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.*
 import com.hawwas.ulibrary.databinding.*
+import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.model.*
 
 class SubjectInfoAdapter(var subjectsInfo: MutableLiveData<List<SubjectHeader>>,
-    val appDataRepo: AppDataRepo):
+                         val appDataRepo: AppDataRepo):
     RecyclerView.Adapter<SubjectInfoAdapter.ViewHolder>() {
         init{
             subjectsInfo.observeForever {

@@ -1,6 +1,6 @@
 package com.hawwas.ulibrary.domain.repo
 
-import com.hawwas.ulibrary.model.*
+import com.hawwas.ulibrary.domain.model.*
 
 interface DatabaseRepo {
     fun upsertItem(item: Item)
