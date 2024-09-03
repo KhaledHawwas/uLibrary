@@ -26,6 +26,7 @@ class MainActivity: AppCompatActivity() {
     @Inject lateinit var androidDownloader: AndroidDownloader
 
     @Inject lateinit var appDataRepo: AppDataRepo
+    @Inject lateinit var databaseRepo: DatabaseRepo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
@@ -52,7 +53,7 @@ class MainActivity: AppCompatActivity() {
         binding.botBtn.setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, botUri))
         }
-        val subjects = localStorage.loadLocalSubjects()
+        val subjects = databaseRepo.getAllSubjects()
 
         if (subjects.isEmpty()) {
             MyLog.d(MyLog.MyTag.NO_SUBJECTS)

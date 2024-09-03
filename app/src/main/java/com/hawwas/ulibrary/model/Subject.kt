@@ -6,6 +6,7 @@ data class Subject(
     val remotePath: String,
     val items: MutableList<Item>
 ) {
+    var hidden=false
     var totalSize = 0L
 }
 

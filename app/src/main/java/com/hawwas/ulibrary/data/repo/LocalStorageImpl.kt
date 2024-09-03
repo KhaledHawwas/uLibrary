@@ -3,7 +3,6 @@ package com.hawwas.ulibrary.data.repo
 import android.content.*
 import android.net.*
 import android.provider.*
-import android.util.*
 import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.data.*
 import com.hawwas.ulibrary.domain.repo.*
@@ -81,31 +80,19 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
             if (itemFile.exists()) DownloadStatus.DOWNLOADED else DownloadStatus.NOT_STARTED
     }
 
-    override fun saveSubjectData(subject: Subject) {
-        val file = getSubjectFile(subject)
-        try {
-            file.writeText(subjectToJson(subject))
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-
     override fun copyItem(filePath: Uri, item: Item) {
         copyItem(filePath, item) {}
     }
 
-
     override fun copyItem(filePath: Uri, item: Item, onFinish: () -> Unit) {
         context.contentResolver.openInputStream(filePath)?.use { inputStream ->
             val itemFile = getItemFile(item)
-            Log.d(TAG, "copyItem: ${itemFile.path}")
             itemFile.parentFile?.mkdirs()
             itemFile.outputStream().use { outputStream ->
                 inputStream.copyTo(outputStream)
             }
         }
         onFinish()
-
     }
 
 
@@ -138,7 +125,7 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
             e.printStackTrace()
         }
     }
-
+//TODO refactor
     override fun loadLocalSubjects(): List<Subject> {
         val subjectFile = File(appDir, rootDir + subjectsDir)
         val subjectFiles = subjectFile.listFiles()
@@ -167,7 +154,7 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
         return file.readText()
     }
 
-    override suspend fun saveLastFetchedTime(time: Long) {
+    override suspend fun setLastFetchedTime(time: Long) {
         dataStoreManager.saveLastFetchedTime(time)
     }
 

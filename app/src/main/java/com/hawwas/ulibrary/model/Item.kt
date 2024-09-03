@@ -29,11 +29,3 @@ data class Item(
 
 }
 
-enum class DownloadStatus {
-    NOT_STARTED, DOWNLOADING, DOWNLOADED, LOCAL, FAILED, ;
-
-    fun downloadable(): Boolean = this == NOT_STARTED || this == FAILED
-
-    fun exists(): Boolean = this == DOWNLOADED || this == LOCAL
-
-}

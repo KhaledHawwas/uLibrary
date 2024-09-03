@@ -24,4 +24,5 @@
     <string name="ok">حسناً</string>
     <string name="file_already_exists">الملف موجود مسبقاَ</string>
     <string name="invalid_file_name">       إسم غير مسموح به</string>
+    <string name="you_can_find_files_in">يمكنك إيجاد الملفات في:</string>
 </resources>

@@ -51,6 +51,11 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation( libs.androidx.fragment.ktx)
 
+//room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
+
     //Gson
     implementation(libs.gson)
 

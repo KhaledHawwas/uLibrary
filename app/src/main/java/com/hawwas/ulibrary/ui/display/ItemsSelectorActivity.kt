@@ -26,6 +26,7 @@ class ItemsSelectorActivity: AppCompatActivity() {
     @Inject lateinit var remoteRepo: RemoteRepo
     @Inject lateinit var appDataRepo: AppDataRepo
     @Inject lateinit var localStorage: LocalStorage
+    @Inject lateinit var databaseRepo: DatabaseRepo
 
     private lateinit var selectedSubject: Subject
     private lateinit var selectedCategory: String
@@ -122,7 +123,7 @@ class ItemsSelectorActivity: AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        localStorage.saveSubjectData(selectedSubject)
+         databaseRepo.upsertSubject(selectedSubject)
     }
 
     companion object {

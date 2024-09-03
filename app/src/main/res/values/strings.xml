@@ -17,10 +17,11 @@
     <string name="never_opened">never opened</string>
     <string name="select_a_file">Select a file</string>
     <string name="you">You</string>
-    <string name="override_file_name">Override File Name</string>
+    <string name="override_file_name">Rename file</string>
     <string name="enter_new_file_name_optional">Enter new file name (optional)</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="file_already_exists">file already exists</string>
     <string name="invalid_file_name">invalid file name</string>
+    <string name="you_can_find_files_in">you can find files in:</string>
 </resources>

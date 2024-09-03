@@ -43,22 +43,11 @@
         app:layout_constraintTop_toBottomOf="@+id/settingBtn">
 
         <ImageButton
-            android:id="@+id/notionBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:backgroundTint="?attr/colorSecondaryVariant"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/notion_seeklogo"
-          />
-
-        <ImageButton
             android:id="@+id/driveBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="32dp"
+            android:background="@drawable/round_shape"
             android:backgroundTint="?attr/colorSecondaryVariant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/notionBtn"
@@ -67,15 +56,28 @@
 
         <ImageButton
             android:id="@+id/botBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/round_shape"
             android:backgroundTint="?attr/colorSecondaryVariant"
-            app:tint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/notionBtn"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bot_24px" />
+            app:srcCompat="@drawable/bot_24px"
+            app:tint="@color/black" />
+
+        <ImageButton
+            android:id="@+id/notionBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/round_shape"
+            android:backgroundTint="?attr/colorSecondaryVariant"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/notion_seeklogo" />
         />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

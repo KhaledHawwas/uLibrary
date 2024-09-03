@@ -8,7 +8,7 @@ interface LocalStorage {
     companion object {
         const val subjectFile = "subject.json"
         const val rootDir = "data/"
-        const val headersAbs = rootDir + "subjectsInfo.json"
+        const val headersPath = rootDir + "subjectsInfo.json"
         const val subjectsHeaderFile = "subjectsInfo.json"
         const val subjectsDir = "subjects/"
 
@@ -27,9 +27,8 @@ interface LocalStorage {
     fun saveFile( fileName: String, data: ByteArray)
     fun saveCache(folderName: String, fileName: String, data: ByteArray)
     fun getFileContent(path: String): String?
-    suspend fun saveLastFetchedTime(time: Long)
+    suspend fun setLastFetchedTime(time: Long)
     suspend fun getLastFetchedTime(): Long
-    fun saveSubjectData(subject: Subject)
     fun updateFileStatus(item: Item)
     fun getItemSize(item: Item): Long
     fun getFileInfo( uri: Uri): FileInfo

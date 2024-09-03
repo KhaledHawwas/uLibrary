@@ -37,4 +37,19 @@ object AppModule {
     fun provideRemoteRepo(androidDownloader: AndroidDownloader): RemoteRepo {
         return RemoteRepoImpl(androidDownloader)
     }
+    @Provides
+    @Singleton
+    fun provideDatabase(myApp: Application): MyDatabase {
+        return Room.databaseBuilder(
+            myApp.applicationContext,
+            MyDatabase::class.java,
+            databaseName
+        ).allowMainThreadQueries()
+            .fallbackToDestructiveMigration().build()
+    }
+    @Provides
+    @Singleton
+    fun provideDatabaseRepo(database: MyDatabase): DatabaseRepo {
+        return DatabaseRepoImpl(database)
+    }
 }

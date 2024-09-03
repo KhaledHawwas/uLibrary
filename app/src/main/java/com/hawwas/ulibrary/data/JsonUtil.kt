@@ -22,6 +22,8 @@ fun toSubject(json: String): Subject {
     val version = jsonObject.getString("version")
     val name = jsonObject.getString("name")
     val remotePath = jsonObject.getString("remote_path")
+
+    val hidden = if (jsonObject.has("hidden")) jsonObject.getBoolean("hidden") else false
     val items = jsonObject.getJSONArray("items")
     val itemsList = mutableListOf<Item>()
     for (i in 0 until items.length()) {
@@ -34,21 +36,20 @@ fun toSubject(json: String): Subject {
             jsonItem.getString("remote_path"),
             name
         )
-        if (jsonItem.has("last_watched"))
-            item.lastWatched = jsonItem.getLong("last_watched")
-        if (jsonItem.has("starred"))
-            item.starred = jsonItem.getBoolean("starred")
+        if (jsonItem.has("last_watched")) item.lastWatched = jsonItem.getLong("last_watched")
+        if (jsonItem.has("starred")) item.starred = jsonItem.getBoolean("starred")
 
 
         itemsList.add(item)
     }
-    return Subject(version, name, remotePath, itemsList)
+    return Subject(version, name, remotePath, itemsList).apply { this.hidden = hidden }
 }
 
 fun subjectToJson(subject: Subject): String {
     val jsonObject = JSONObject()
     jsonObject.put("version", subject.version)
     jsonObject.put("name", subject.name)
+    if (jsonObject.has("hidden")) jsonObject.put("hidden", subject.hidden)
     jsonObject.put("remote_path", subject.remotePath)
     val items = JSONArray()
     subject.items.forEach {
