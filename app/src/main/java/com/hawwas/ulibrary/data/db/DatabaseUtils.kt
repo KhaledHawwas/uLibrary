@@ -54,3 +54,16 @@ fun SubjectWithItems.toSubject(): Subject {
         hidden= this@toSubject.subjectEntity.hidden
     }
 }
+fun SubjectHeaderEntity.toSubjectHeader(): SubjectHeader {
+    return SubjectHeader(
+        name = name,
+        remotePath = remotePath,
+    )
+}
+
+fun SubjectHeader.toSubjectHeaderEntity(): SubjectHeaderEntity {
+    return SubjectHeaderEntity(
+        name = name,
+        remotePath = remotePath,
+    )
+}

@@ -7,8 +7,6 @@ import com.hawwas.ulibrary.*
 import com.hawwas.ulibrary.data.*
 import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.domain.repo.LocalStorage.Companion.rootDir
-import com.hawwas.ulibrary.domain.repo.LocalStorage.Companion.subjectsDir
 import java.io.*
 import java.security.*
 
@@ -18,7 +16,6 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
     private val dataStoreManager = DataStoreManager(context)
 
     fun getItemFile(item: Item) = File(appDir, LocalStorage.getItemPath(item))
-    fun getSubjectFile(subject: Subject) = File(appDir, LocalStorage.getSubjectFile(subject))
     override fun getAppDir(): String = appDir.absolutePath
     override fun getFileInfo(uri: Uri): FileInfo {
         var name = ""
@@ -125,7 +122,8 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
             e.printStackTrace()
         }
     }
-//TODO refactor
+    /*
+    before room
     override fun loadLocalSubjects(): List<Subject> {
         val subjectFile = File(appDir, rootDir + subjectsDir)
         val subjectFiles = subjectFile.listFiles()
@@ -145,7 +143,7 @@ class LocalStorageImpl(private val context: Context): LocalStorage {
         }
         return subjects
     }
-
+*/
     override fun getFileContent(path: String): String? {
         val file = File(path)
         if (!file.exists()) {

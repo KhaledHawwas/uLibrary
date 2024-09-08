@@ -1,10 +1,9 @@
 package com.hawwas.ulibrary.data.repo
 
+import android.util.*
 import com.hawwas.ulibrary.data.db.*
-import com.hawwas.ulibrary.domain.repo.*
-import com.hawwas.ulibrary.data.db.*
-import com.hawwas.ulibrary.data.db.entity.*
 import com.hawwas.ulibrary.domain.model.*
+import com.hawwas.ulibrary.domain.repo.*
 import javax.inject.*
 
 class DatabaseRepoImpl @Inject constructor(
@@ -24,6 +23,9 @@ class DatabaseRepoImpl @Inject constructor(
 
     override fun upsertSubject(subject: Subject) {
         database.subjectDao().upsertSubject(subject.toSubjectEntity())
+        for (item in subject.items) {
+            upsertItem(item)
+        }
     }
 
     override fun deleteSubject(subject: Subject) {
@@ -36,6 +38,22 @@ class DatabaseRepoImpl @Inject constructor(
 
     override fun getAllSubjects(): List<Subject> {
         return database.subjectDao().getAllSubjects().map { it.toSubject() }
+    }
+
+    override fun getSubjectHeader(subjectName: String): SubjectHeader {
+        return database.subjectHeaderDao().getSubjectHeader(subjectName).toSubjectHeader()
+    }
+
+    override fun getAllSubjectHeaders(): List<SubjectHeader> {
+        return database.subjectHeaderDao().getAllSubjectHeaders().map { it.toSubjectHeader() }
+    }
+
+    override fun upsertSubjectHeader(subjectHeader: SubjectHeader) {
+        database.subjectHeaderDao().upsert(subjectHeader.toSubjectHeaderEntity())
+    }
+
+    override fun upsertSubjectHeaders(subjects: List<SubjectHeader>) {
+        database.subjectHeaderDao().upsertAll(subjects.map { it.toSubjectHeaderEntity() })
     }
 
 

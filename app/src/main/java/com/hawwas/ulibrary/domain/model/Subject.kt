@@ -3,7 +3,7 @@ package com.hawwas.ulibrary.domain.model
 data class Subject(
     val version: String,
     val name: String,
-    val remotePath: String,
+    var remotePath: String,
     val items: MutableList<Item>
 ) {
     var hidden=false

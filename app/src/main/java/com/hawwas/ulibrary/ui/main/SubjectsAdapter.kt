@@ -19,7 +19,8 @@ class SubjectsAdapter(
     private val lifecycleOwner: LifecycleOwner
 ): RecyclerView.Adapter<SubjectsAdapter.ViewHolder>() {
     private lateinit var parent: ViewGroup
-
+    val filteredSubjects
+        get() = subjects.value?.filter { !it.hidden } ?: emptyList()
     init {
         subjects.observe(lifecycleOwner) {
             try {
@@ -81,7 +82,7 @@ class SubjectsAdapter(
         )
         appDataRepo.downloadedItem().observe(lifecycleOwner) { path ->
             val p = path.split("/")[0]
-            val index = subjects.value?.indexOfFirst { it.name == p } ?: -1
+            val index = filteredSubjects.indexOfFirst { it.name == p }
             if (index != -1) {
                 try {
                     notifyItemChanged(index)
@@ -98,11 +99,15 @@ class SubjectsAdapter(
             Log.d(TAG, "value is null")
             return
         }
-        holder.bind(subjects.value!![position])
+        holder.bind(filteredSubjects[position])
     }
 
     override fun getItemCount(): Int {
-        return subjects.value?.size ?: 0.also { Log.d(TAG, "null") }
+        if (subjects.value == null) {
+            MyLog.d(MyLog.MyTag.LAZY_IO, "subjects is null")
+            return 0
+        }
+        return filteredSubjects.size
     }
 
     companion object {

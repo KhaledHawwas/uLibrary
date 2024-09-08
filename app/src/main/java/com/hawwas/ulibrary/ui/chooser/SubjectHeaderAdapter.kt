@@ -7,26 +7,32 @@ import com.hawwas.ulibrary.databinding.*
 import com.hawwas.ulibrary.domain.model.*
 import com.hawwas.ulibrary.domain.repo.*
 
-class SubjectInfoAdapter(var subjectsInfo: MutableLiveData<List<SubjectHeader>>,
-                         val appDataRepo: AppDataRepo):
-    RecyclerView.Adapter<SubjectInfoAdapter.ViewHolder>() {
-        init{
-            subjectsInfo.observeForever {
-             try {
-                 notifyDataSetChanged()
-             }catch (e: Exception){}//TODO: find reason
-            }
+class SubjectHeaderAdapter(
+    var subjectsHeaders: MutableLiveData<List<SubjectHeader>>,
+    val appDataRepo: AppDataRepo,
+
+    ):
+    RecyclerView.Adapter<SubjectHeaderAdapter.ViewHolder>() {
+    init {
+
+        subjectsHeaders.observeForever {
+            try {
+                notifyDataSetChanged()
+            } catch (e: Exception) {
+            }//TODO: find reason
         }
+    }
 
 
     inner class ViewHolder(private val binding: ItemSubjectInfoBinding):
         RecyclerView.ViewHolder(binding.root) {
         fun bind(subjectHeader: SubjectHeader) {
             binding.subjectName.text = subjectHeader.name
-            binding.subjectSelectedCB.isChecked = subjectHeader.selected//TODO: fix
+            //TODO: fix
+            binding.subjectSelectedCB.isChecked = subjectHeader.selected
             binding.subjectSelectedCB.setOnClickListener {
                 subjectHeader.selected = binding.subjectSelectedCB.isChecked
-                subjectsInfo.value = subjectsInfo.value //  to trigger observer
+                subjectsHeaders.value = subjectsHeaders.value //  to trigger observer
             }
         }
 
@@ -42,11 +48,11 @@ class SubjectInfoAdapter(var subjectsInfo: MutableLiveData<List<SubjectHeader>>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(subjectsInfo.value!![position])
+        holder.bind(subjectsHeaders.value!![position])
     }
 
     override fun getItemCount(): Int {
-        return subjectsInfo.value?.size ?: 0
+        return subjectsHeaders.value?.size ?: 0
     }
 
 

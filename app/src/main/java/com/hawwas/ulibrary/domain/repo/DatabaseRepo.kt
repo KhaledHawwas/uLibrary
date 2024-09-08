@@ -14,5 +14,16 @@ interface DatabaseRepo {
     fun deleteSubject(subject: Subject)
 
     fun getSubject(subjectName: String): Subject
+
     fun getAllSubjects(): List<Subject>
+
+    fun getSubjectHeader(subjectName: String): SubjectHeader
+
+    fun getAllSubjectHeaders(): List<SubjectHeader>
+
+    fun upsertSubjectHeader(subjectHeader: SubjectHeader)
+
+    fun upsertSubjectHeaders(subjects: List<SubjectHeader>)
+
+
 }

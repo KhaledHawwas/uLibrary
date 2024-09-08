@@ -27,7 +27,7 @@ class DownloadReceiver: BroadcastReceiver() {
             val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
             val downloadedUriString = cursor.getString(columnIndex)
             if (downloadedUriString == null) {
-                Log.d(TAG, "onReceive: ${intent?.action}")
+                Log.d(TAG, "onReceive: ${intent.action}")
                 return
             }
             MyLog.d(MyLog.MyTag.DOWNLOAD_COMPLETE, TAG, "received: $downloadedUriString")

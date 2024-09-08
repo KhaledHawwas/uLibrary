@@ -26,6 +26,7 @@ class MainActivity: AppCompatActivity() {
     @Inject lateinit var androidDownloader: AndroidDownloader
 
     @Inject lateinit var appDataRepo: AppDataRepo
+
     @Inject lateinit var databaseRepo: DatabaseRepo
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -76,9 +76,8 @@ class ItemsSelectorActivity: AppCompatActivity() {
         if (requestCode != REQUEST_CODE_PICK_FILE || resultCode != RESULT_OK) return
         if (data == null || data.data == null) return
         val uri = data.data ?: return
-        var fileInfo: FileInfo?
+        val fileInfo: FileInfo?
         try {
-
             fileInfo = localStorage.getFileInfo(uri)
         } catch (e: IOException) {
             Log.d(TAG, "error: (${e.message}): ${uri.path}")
@@ -93,7 +92,6 @@ class ItemsSelectorActivity: AppCompatActivity() {
             Toast.makeText(this, getString(R.string.file_already_exists), Toast.LENGTH_SHORT).show()
             return
         }
-
 
         val item = Item(
             existedVersion.name,
