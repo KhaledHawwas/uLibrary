@@ -18,7 +18,6 @@ To contribute, see: [contributing](CONTRIBUTING.md).
 
 ## Features
 
-- Downloads data using retrofit and store it in cache and external storage.
 - Downloads materials using android download manager.
 - Explore downloaded materials in fast way.
 
